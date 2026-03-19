@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants/app_images.dart';
 import '../../../constants/app_routes.dart';
 import '../../../constants/app_spacing.dart';
 import '../../../constants/app_strings.dart';
+import '../../../providers/quotes_provider.dart';
+import '../../../providers/routine_provider.dart';
+import '../../../providers/tips_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_fonts.dart';
 import '../../widgets/common/accent_bar.dart';
@@ -15,6 +19,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final routineProvider = context.watch<RoutineProvider>();
+    final quotesProvider = context.watch<QuotesProvider>();
+    final tipsProvider = context.watch<TipsProvider>();
+    final quote = quotesProvider.quoteOfTheDay;
+    final tip = tipsProvider.tipOfTheDay();
+    final featuredTopicId =
+        tipsProvider.topics.isEmpty ? null : tipsProvider.topics.first.id;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -56,15 +68,22 @@ class HomePage extends StatelessWidget {
               Gaps.hSm,
               AccentBar.blue,
               Gaps.hLg,
-              const _ProgressCard(),
+              _ProgressCard(
+                completedHours: routineProvider.completedHoursCount,
+                breathingMinutes: routineProvider.breathingMinutes,
+                streakDays: routineProvider.streakDays,
+                onResetTap: () {
+                  routineProvider.resetToday();
+                },
+              ),
               Gaps.hXl,
               Text(
                 '🕐 ${AppStrings.hourlyRoutineTitle}',
                 style: AppFonts.display(size: 18, color: Colors.white),
               ),
               Gaps.hSm,
-              ...List.generate(8, (index) {
-                final hour = index + 1;
+              ...routineProvider.hourlyRoutine.map((item) {
+                final hour = item.hour;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: AppSpacing.xs),
                   child: InkWell(
@@ -82,12 +101,12 @@ class HomePage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              '${hour}th Hour',
+                              item.label,
                               style: AppFonts.body(color: Colors.white),
                             ),
                           ),
                           Text(
-                            'Foundation Preview  ►',
+                            '${item.exercise.name} ${routineProvider.statusEmojiForHour(hour)}  ►',
                             style: AppFonts.body(color: Colors.white),
                           ),
                         ],
@@ -124,7 +143,11 @@ class HomePage extends StatelessWidget {
                     child: _ActionCard(
                       emoji: '💡',
                       label: 'Tips of the Day',
-                      onTap: () => context.go(AppRoutes.tips),
+                      onTap: () => context.go(
+                        tip == null || featuredTopicId == null
+                            ? AppRoutes.tips
+                            : AppRoutes.tipDetail(featuredTopicId),
+                      ),
                     ),
                   ),
                 ],
@@ -145,15 +168,18 @@ class HomePage extends StatelessWidget {
                     ),
                     Gaps.hXs,
                     Text(
-                      '"Small steps every day add up to big results."',
+                      quote == null ? '"No quote available yet."' : '"${quote.text}"',
                       style: AppFonts.body(color: Colors.white),
                     ),
                     Gaps.hXs,
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '— Foundation Preview',
-                        style: AppFonts.body(size: 13, color: AppColors.purpleStart),
+                        quote == null ? '—' : '— ${quote.author}',
+                        style: AppFonts.body(
+                          size: 13,
+                          color: AppColors.purpleStart,
+                        ),
                       ),
                     ),
                   ],
@@ -169,7 +195,17 @@ class HomePage extends StatelessWidget {
 }
 
 class _ProgressCard extends StatelessWidget {
-  const _ProgressCard();
+  const _ProgressCard({
+    required this.completedHours,
+    required this.breathingMinutes,
+    required this.streakDays,
+    required this.onResetTap,
+  });
+
+  final int completedHours;
+  final int breathingMinutes;
+  final int streakDays;
+  final VoidCallback onResetTap;
 
   @override
   Widget build(BuildContext context) {
@@ -186,17 +222,29 @@ class _ProgressCard extends StatelessWidget {
             ),
           ),
           Gaps.hSm,
-          const _ProgressRow(label: '✅ Completed Hours:', value: '0 / 8'),
+          _ProgressRow(
+            label: '✅ Completed Hours:',
+            value: '$completedHours / 8',
+          ),
           Gaps.hXs,
-          const _ProgressRow(label: '🏃 Breathing:', value: '0 min'),
+          _ProgressRow(
+            label: '🏃 Breathing:',
+            value: '$breathingMinutes min',
+          ),
           Gaps.hXs,
-          const _ProgressRow(label: '🔥 Streak:', value: '0 days'),
+          _ProgressRow(
+            label: '🔥 Streak:',
+            value: '$streakDays days',
+          ),
           Gaps.hSm,
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              '🔄 Reset Day',
-              style: AppFonts.body(size: 13, color: AppColors.primaryBlue),
+          InkWell(
+            onTap: onResetTap,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '🔄 Reset Day',
+                style: AppFonts.body(size: 13, color: AppColors.primaryBlue),
+              ),
             ),
           ),
         ],

@@ -30,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _goNext() async {
     final bootstrap = context.read<AppBootstrapProvider>();
-    if (!bootstrap.initialized) {
+    if (!bootstrap.isReady) {
       await bootstrap.initialize();
     }
     if (!mounted) {

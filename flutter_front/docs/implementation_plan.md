@@ -454,9 +454,9 @@ Exit criteria:
 
 Checklist:
 
-- [ ] Add domain providers.
-- [ ] Add app bootstrap flow.
-- [ ] Add first-launch logic and splash routing.
+- [x] Add domain providers.
+- [x] Add app bootstrap flow.
+- [x] Add first-launch logic and splash routing.
 - [ ] Add app lifecycle observer for permission re-checks.
 
 Exit criteria:
@@ -526,7 +526,7 @@ This section is the operational checklist we will update while implementing the 
 
 - [x] Phase 1. Foundation
 - [x] Phase 2. Models, storage, repositories
-- [ ] Phase 3. Providers and bootstrap
+- [x] Phase 3. Providers and bootstrap
 - [ ] Phase 4. Core UI transfer
 - [ ] Phase 5. Interactive exercise flows
 - [ ] Phase 6. Notifications and permissions
@@ -536,7 +536,8 @@ This section is the operational checklist we will update while implementing the 
 
 - [x] Start Phase 1 by replacing the starter Flutter counter app with the project foundation
 - [x] Start Phase 2 by adding bundled data models, local asset loading, and repositories
-- [ ] Start Phase 3 by binding repositories into domain providers and replacing foundation placeholders with live startup state
+- [x] Start Phase 3 by binding repositories into domain providers and replacing foundation placeholders with live startup state
+- [ ] Start Phase 4 by replacing tab placeholders with full mockup-driven UI for Welcome, Home, Tips, Tip Detail, Quotes, and Settings
 
 ---
 
