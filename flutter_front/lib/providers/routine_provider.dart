@@ -10,8 +10,8 @@ class RoutineProvider extends ChangeNotifier {
   RoutineProvider({
     required ExerciseRepository exerciseRepository,
     required ProgressRepository progressRepository,
-  })  : _exerciseRepository = exerciseRepository,
-        _progressRepository = progressRepository;
+  }) : _exerciseRepository = exerciseRepository,
+       _progressRepository = progressRepository;
 
   final ExerciseRepository _exerciseRepository;
   final ProgressRepository _progressRepository;
@@ -36,6 +36,7 @@ class RoutineProvider extends ChangeNotifier {
 
   int get completedHoursCount => todayProgress.completedHours.length;
   int get breathingMinutes => todayProgress.breathingMinutes;
+  int get workoutSessions => todayProgress.workoutSessions;
 
   int get streakDays {
     final keys = _userProgress.dailyProgress.keys.toList()..sort();
@@ -49,7 +50,8 @@ class RoutineProvider extends ChangeNotifier {
       if (progress == null) {
         break;
       }
-      final hasActivity = progress.completedHours.isNotEmpty ||
+      final hasActivity =
+          progress.completedHours.isNotEmpty ||
           progress.breathingMinutes > 0 ||
           progress.workoutSessions > 0;
       if (!hasActivity) {
@@ -90,6 +92,42 @@ class RoutineProvider extends ChangeNotifier {
       completedHours: completed,
       breathingMinutes: todayProgress.breathingMinutes,
       workoutSessions: todayProgress.workoutSessions,
+    );
+    _userProgress = UserProgress(
+      dailyProgress: {
+        ..._userProgress.dailyProgress,
+        todayKey: updatedDay,
+      },
+    );
+    notifyListeners();
+    await _progressRepository.save(_userProgress);
+  }
+
+  Future<void> addBreathingMinutes(int minutes) async {
+    if (minutes <= 0) {
+      return;
+    }
+
+    final updatedDay = DayProgress(
+      completedHours: todayProgress.completedHours,
+      breathingMinutes: todayProgress.breathingMinutes + minutes,
+      workoutSessions: todayProgress.workoutSessions,
+    );
+    _userProgress = UserProgress(
+      dailyProgress: {
+        ..._userProgress.dailyProgress,
+        todayKey: updatedDay,
+      },
+    );
+    notifyListeners();
+    await _progressRepository.save(_userProgress);
+  }
+
+  Future<void> incrementWorkoutSessions() async {
+    final updatedDay = DayProgress(
+      completedHours: todayProgress.completedHours,
+      breathingMinutes: todayProgress.breathingMinutes,
+      workoutSessions: todayProgress.workoutSessions + 1,
     );
     _userProgress = UserProgress(
       dailyProgress: {

@@ -6,6 +6,7 @@ abstract final class AppRoutes {
   static const breathe = '/breathe';
   static const quotes = '/quotes';
   static const workout = '/workout';
+  static const workoutSession = '/workout/session';
   static const settings = '/settings';
   static const exercise = '/exercise';
   static const addExercise = '/workout/add-exercise';

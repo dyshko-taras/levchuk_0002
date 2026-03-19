@@ -33,7 +33,9 @@ class ActiveOfficeApp extends StatelessWidget {
         Provider(create: (_) => WorkoutRepository()),
         Provider(create: (_) => BreathingSettingsRepository()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()..load()),
-        ChangeNotifierProvider(create: (_) => AppBootstrapProvider()..initialize()),
+        ChangeNotifierProvider(
+          create: (_) => AppBootstrapProvider()..initialize(),
+        ),
         ChangeNotifierProvider(create: (_) => ShellNavigationProvider()),
         ChangeNotifierProvider(
           create: (context) => RoutineProvider(
@@ -54,12 +56,14 @@ class ActiveOfficeApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => BreathingProvider(
             repository: context.read<BreathingSettingsRepository>(),
+            routineProvider: context.read<RoutineProvider>(),
           )..load(),
         ),
         ChangeNotifierProvider(
           create: (context) => WorkoutProvider(
             workoutRepository: context.read<WorkoutRepository>(),
             exerciseRepository: context.read<ExerciseRepository>(),
+            routineProvider: context.read<RoutineProvider>(),
           )..load(),
         ),
       ],

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants/app_routes.dart';
+import '../../ui/pages/add_exercise_page.dart';
+import '../../ui/pages/breathing_page.dart';
 import '../../ui/pages/breathing_settings_page.dart';
+import '../../ui/pages/custom_step_page.dart';
 import '../../ui/pages/exercise_page.dart';
 import '../../ui/pages/quotes_page.dart';
 import '../../ui/pages/settings_page.dart';
 import '../../ui/pages/tip_detail_page.dart';
 import '../../ui/pages/tips_page.dart';
-import '../../ui/pages/placeholder_page.dart';
+import '../../ui/pages/workout_page.dart';
+import '../../ui/pages/workout_session_page.dart';
 import '../../ui/pages/shell/home_page.dart';
 import '../../ui/pages/shell/main_shell_page.dart';
 import '../../ui/pages/splash_page.dart';
@@ -56,10 +60,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.breathe,
-                builder: (_, __) => const PlaceholderPage(
-                  title: 'Focus Breathing',
-                  subtitle: 'Breathing flow will be implemented in Phase 5.',
-                ),
+                builder: (_, __) => const BreathingPage(),
               ),
             ],
           ),
@@ -75,10 +76,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.workout,
-                builder: (_, __) => const PlaceholderPage(
-                  title: 'Create Workout',
-                  subtitle: 'Workout flow will be implemented in Phase 5.',
-                ),
+                builder: (_, __) => const WorkoutPage(),
               ),
             ],
           ),
@@ -94,22 +92,17 @@ class AppRouter {
       ),
       GoRoute(
         path: '${AppRoutes.exercise}/:hour',
-        builder: (_, state) =>
-            ExercisePage(hour: int.tryParse(state.pathParameters['hour'] ?? '') ?? 1),
+        builder: (_, state) => ExercisePage(
+          hour: int.tryParse(state.pathParameters['hour'] ?? '') ?? 1,
+        ),
       ),
       GoRoute(
         path: AppRoutes.addExercise,
-        builder: (_, __) => const PlaceholderPage(
-          title: 'Add Exercise',
-          subtitle: 'Workout exercise selection will be implemented in Phase 5.',
-        ),
+        builder: (_, __) => const AddExercisePage(),
       ),
       GoRoute(
         path: AppRoutes.customStep,
-        builder: (_, __) => const PlaceholderPage(
-          title: 'Custom Step',
-          subtitle: 'Custom step validation will be implemented in Phase 5.',
-        ),
+        builder: (_, __) => const CustomStepPage(),
       ),
       GoRoute(
         path: '${AppRoutes.tips}/:topicId',
@@ -119,6 +112,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.breathingSettings,
         builder: (_, __) => const BreathingSettingsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.workoutSession,
+        builder: (_, __) => const WorkoutSessionPage(),
       ),
     ],
   );

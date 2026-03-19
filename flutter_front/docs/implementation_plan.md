@@ -480,9 +480,9 @@ Exit criteria:
 
 Checklist:
 
-- [ ] Implement Exercise screen timer and completion logic.
-- [ ] Implement Breathing screen animation/timer/settings.
-- [ ] Implement Workout, Add Exercise, and Custom Step flows with validation.
+- [x] Implement Exercise screen timer and completion logic.
+- [x] Implement Breathing screen animation/timer/settings.
+- [x] Implement Workout, Add Exercise, and Custom Step flows with validation.
 
 Exit criteria:
 
@@ -528,7 +528,7 @@ This section is the operational checklist we will update while implementing the 
 - [x] Phase 2. Models, storage, repositories
 - [x] Phase 3. Providers and bootstrap
 - [x] Phase 4. Core UI transfer
-- [ ] Phase 5. Interactive exercise flows
+- [x] Phase 5. Interactive exercise flows
 - [ ] Phase 6. Notifications and permissions
 - [ ] Phase 7. Debug tooling and finish
 
@@ -538,7 +538,7 @@ This section is the operational checklist we will update while implementing the 
 - [x] Start Phase 2 by adding bundled data models, local asset loading, and repositories
 - [x] Start Phase 3 by binding repositories into domain providers and replacing foundation placeholders with live startup state
 - [x] Start Phase 4 by replacing tab placeholders with full mockup-driven UI for Welcome, Home, Tips, Tip Detail, Quotes, and Settings
-- [ ] Start Phase 5 by implementing the interactive exercise, breathing, and workout flows with timers, validation, and completion handling
+- [x] Start Phase 5 by implementing the interactive exercise, breathing, and workout flows with timers, validation, and completion handling
 
 ---
 
