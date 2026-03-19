@@ -6,6 +6,10 @@ abstract final class PrefKeys {
   static const breathingReminders = 'settings.breathing_reminders';
   static const soundEnabled = 'settings.sound_enabled';
   static const devicePreviewEnabled = 'settings.device_preview_enabled';
+  static const userProgress = 'storage.user_progress';
+  static const breathingSettings = 'storage.breathing_settings';
+  static const customWorkouts = 'storage.custom_workouts';
+  static const quoteHistory = 'storage.quote_history';
 }
 
 class PrefsStore {
@@ -19,5 +23,15 @@ class PrefsStore {
 
   Future<void> saveBool(String key, bool value) async {
     await (await _prefs).setBool(key, value);
+  }
+
+  Future<String?> readString(String key) async => (await _prefs).getString(key);
+
+  Future<void> saveString(String key, String value) async {
+    await (await _prefs).setString(key, value);
+  }
+
+  Future<void> remove(String key) async {
+    await (await _prefs).remove(key);
   }
 }

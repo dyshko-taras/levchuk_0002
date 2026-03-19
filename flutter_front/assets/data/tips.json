@@ -1,0 +1,232 @@
+[
+  {
+    "id": "eye_tips",
+    "title": "Eye Tips",
+    "emoji": "🧠",
+    "shortDescription": "Reduce strain and protect your eyes during long hours in front of a screen",
+    "tips": [
+      {
+        "id": "eye_20_20_20",
+        "title": "The 20-20-20 Rule",
+        "body": "Every 20 minutes, look at something 20 feet away for at least 20 seconds to relax your focusing muscles and reduce digital eye strain."
+      },
+      {
+        "id": "eye_blinking",
+        "title": "Blink More Often",
+        "body": "Screen work often reduces blinking. Conscious blinking helps keep your eyes moist and lowers irritation."
+      },
+      {
+        "id": "eye_screen_level",
+        "title": "Position Your Screen Well",
+        "body": "Keep the top of your monitor at or slightly below eye level to avoid extra neck strain and uncomfortable gaze angles."
+      }
+    ]
+  },
+  {
+    "id": "posture_tips",
+    "title": "Posture Tips",
+    "emoji": "🏋",
+    "shortDescription": "Keep your body aligned and comfortable throughout the workday",
+    "tips": [
+      {
+        "id": "posture_feet_grounded",
+        "title": "Keep Feet Grounded",
+        "body": "Rest both feet flat on the floor or on a footrest to support your lower back and reduce tension through your hips."
+      },
+      {
+        "id": "posture_screen_distance",
+        "title": "Keep the Screen at Arm's Length",
+        "body": "A comfortable viewing distance helps you avoid leaning forward and keeps your shoulders from rounding."
+      },
+      {
+        "id": "posture_micro_resets",
+        "title": "Reset Your Posture Often",
+        "body": "A quick posture reset every hour is more realistic and effective than trying to stay perfectly upright all day."
+      }
+    ]
+  },
+  {
+    "id": "stress_tips",
+    "title": "Stress Tips",
+    "emoji": "😌",
+    "shortDescription": "Calm your mind, manage daily pressure, and improve focus",
+    "tips": [
+      {
+        "id": "stress_name_it",
+        "title": "Name the Stressor",
+        "body": "When you feel overwhelmed, briefly identify the exact source of pressure. Clarity makes stress feel more manageable."
+      },
+      {
+        "id": "stress_breathe",
+        "title": "Use a Short Breathing Reset",
+        "body": "A one- to three-minute breathing session can lower tension quickly and help you return to your next task with more control."
+      },
+      {
+        "id": "stress_task_split",
+        "title": "Break the Task Down",
+        "body": "If stress comes from workload, split the task into one immediate next step instead of trying to solve everything at once."
+      }
+    ]
+  },
+  {
+    "id": "focus_fatigue",
+    "title": "Focus & Fatigue",
+    "emoji": "⚡",
+    "shortDescription": "Reignite concentration and maintain steady energy throughout the day",
+    "tips": [
+      {
+        "id": "focus_single_task",
+        "title": "Single-Task for a Short Window",
+        "body": "A focused 20-minute block often produces better work than trying to multitask across several tabs and conversations."
+      },
+      {
+        "id": "focus_stand_up",
+        "title": "Stand Up Before the Slump",
+        "body": "A quick standing or stretching break before fatigue peaks helps restore alertness faster than pushing through."
+      },
+      {
+        "id": "focus_protect_attention",
+        "title": "Protect Your Attention",
+        "body": "Silence nonessential notifications during deep work so your brain is not constantly forced to reorient."
+      }
+    ]
+  },
+  {
+    "id": "hydration_nutrition",
+    "title": "Hydration & Nutrition",
+    "emoji": "🧃",
+    "shortDescription": "Fuel your body with hydration and simple, energizing meals",
+    "tips": [
+      {
+        "id": "hydration_visible_water",
+        "title": "Keep Water Visible",
+        "body": "A water bottle in sight acts as a reminder and makes it easier to stay hydrated throughout the day."
+      },
+      {
+        "id": "hydration_steady_snacks",
+        "title": "Choose Steady Energy Snacks",
+        "body": "Pairing protein or fiber with carbs can help you avoid the sharp crashes that come from sugary snacks alone."
+      },
+      {
+        "id": "hydration_lunch_light",
+        "title": "Keep Lunch Balanced",
+        "body": "A balanced lunch supports concentration better than a heavy meal that leaves you sleepy in the afternoon."
+      }
+    ]
+  },
+  {
+    "id": "sleep_recovery",
+    "title": "Sleep & Recovery",
+    "emoji": "🌙",
+    "shortDescription": "Rest deeply to recharge your mind and body",
+    "tips": [
+      {
+        "id": "sleep_regular_schedule",
+        "title": "Keep a Stable Sleep Schedule",
+        "body": "Going to bed and waking up at similar times helps your body recover more consistently."
+      },
+      {
+        "id": "sleep_light_exposure",
+        "title": "Reduce Bright Light at Night",
+        "body": "Lowering screen brightness and harsh light exposure in the evening can make it easier to wind down."
+      },
+      {
+        "id": "sleep_evening_shutdown",
+        "title": "Create a Work Shutdown Ritual",
+        "body": "A clear transition at the end of the workday makes it easier for your brain to stop replaying unfinished tasks."
+      }
+    ]
+  },
+  {
+    "id": "mental_health",
+    "title": "Mental Health",
+    "emoji": "🎭",
+    "shortDescription": "Build emotional balance and resilience against daily stress",
+    "tips": [
+      {
+        "id": "mental_check_in",
+        "title": "Check In With Yourself",
+        "body": "A quick emotional check-in helps you notice when tension is building before it becomes burnout."
+      },
+      {
+        "id": "mental_talk_support",
+        "title": "Talk Before It Piles Up",
+        "body": "If work pressure keeps growing, discussing it early with a teammate, manager, or trusted person is often more effective than waiting."
+      },
+      {
+        "id": "mental_boundaries",
+        "title": "Set Clear Boundaries",
+        "body": "Protecting focus time and rest time supports long-term emotional resilience."
+      }
+    ]
+  },
+  {
+    "id": "mobility_stretching",
+    "title": "Mobility & Stretching",
+    "emoji": "🧍",
+    "shortDescription": "Stay flexible and prevent stiffness caused by prolonged sitting",
+    "tips": [
+      {
+        "id": "mobility_short_often",
+        "title": "Stretch Briefly but Often",
+        "body": "Short movement breaks spread across the day are easier to keep and more effective than a single long break."
+      },
+      {
+        "id": "mobility_full_range",
+        "title": "Move Through Full Range",
+        "body": "Gentle full-range movement helps restore mobility better than tiny, rushed motions."
+      },
+      {
+        "id": "mobility_pair_breathing",
+        "title": "Pair Motion With Breathing",
+        "body": "Slow breathing during stretches helps your body relax and makes the movement feel smoother."
+      }
+    ]
+  },
+  {
+    "id": "productivity_balance",
+    "title": "Productivity & Time Balance",
+    "emoji": "💻",
+    "shortDescription": "Work smarter, not longer — balance focus and rest",
+    "tips": [
+      {
+        "id": "productivity_define_next",
+        "title": "Define the Next Action",
+        "body": "When you know the next concrete step, it is easier to restart work after an interruption or short break."
+      },
+      {
+        "id": "productivity_break_cycles",
+        "title": "Build Breaks Into the Day",
+        "body": "Deliberate pauses help preserve output across the full day instead of burning energy early."
+      },
+      {
+        "id": "productivity_time_box",
+        "title": "Time-Box Shallow Work",
+        "body": "Email, chat, and admin tasks expand easily, so giving them a fixed window helps protect deeper work."
+      }
+    ]
+  },
+  {
+    "id": "breathing_relaxation",
+    "title": "Breathing & Relaxation",
+    "emoji": "🌬",
+    "shortDescription": "Regain calm and focus through intentional breathing",
+    "tips": [
+      {
+        "id": "breathing_slow_exhale",
+        "title": "Lengthen the Exhale",
+        "body": "A slightly longer exhale often helps your nervous system settle more quickly than shallow breathing."
+      },
+      {
+        "id": "breathing_shoulders_down",
+        "title": "Drop Your Shoulders",
+        "body": "Relaxing your jaw and shoulders while breathing helps the entire exercise feel more effective."
+      },
+      {
+        "id": "breathing_micro_sessions",
+        "title": "Use Micro Sessions",
+        "body": "Even one minute of intentional breathing can help reset your focus between demanding tasks."
+      }
+    ]
+  }
+]

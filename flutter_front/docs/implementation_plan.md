@@ -440,10 +440,10 @@ Exit criteria:
 
 Checklist:
 
-- [ ] Add JSON models with `json_serializable`.
-- [ ] Add `PrefsStore`.
-- [ ] Add asset loader.
-- [ ] Add repositories for exercises, tips, quotes, workouts, progress, and settings.
+- [x] Add JSON models with `json_serializable`.
+- [x] Add `PrefsStore`.
+- [x] Add asset loader.
+- [x] Add repositories for exercises, tips, quotes, workouts, progress, and settings.
 
 Exit criteria:
 
@@ -525,7 +525,7 @@ This section is the operational checklist we will update while implementing the 
 ### Overall progress
 
 - [x] Phase 1. Foundation
-- [ ] Phase 2. Models, storage, repositories
+- [x] Phase 2. Models, storage, repositories
 - [ ] Phase 3. Providers and bootstrap
 - [ ] Phase 4. Core UI transfer
 - [ ] Phase 5. Interactive exercise flows
@@ -535,7 +535,8 @@ This section is the operational checklist we will update while implementing the 
 ### Immediate next step
 
 - [x] Start Phase 1 by replacing the starter Flutter counter app with the project foundation
-- [ ] Start Phase 2 by adding bundled data models, local asset loading, and repositories
+- [x] Start Phase 2 by adding bundled data models, local asset loading, and repositories
+- [ ] Start Phase 3 by binding repositories into domain providers and replacing foundation placeholders with live startup state
 
 ---
 

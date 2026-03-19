@@ -1,0 +1,146 @@
+[
+  {
+    "id": "stand_side_bend",
+    "name": "Stand Side Bend",
+    "instruction": "Stand tall, place one hand on your hip, and bend sideways slowly. Alternate sides with steady breathing.",
+    "motivation": "Loosen your spine and wake up your core after sitting.",
+    "durationSeconds": 25,
+    "emoji": "📋"
+  },
+  {
+    "id": "chair_squat",
+    "name": "Chair Squat",
+    "instruction": "Stand in front of your chair, lower down until you almost sit, then rise back up with control.",
+    "motivation": "Activate your legs and improve circulation.",
+    "durationSeconds": 30,
+    "emoji": "🏃"
+  },
+  {
+    "id": "neck_stretch",
+    "name": "Neck Stretch",
+    "instruction": "Gently tilt your head to each side and hold briefly without forcing the stretch.",
+    "motivation": "Release built-up tension from long screen sessions.",
+    "durationSeconds": 20,
+    "emoji": "🧠"
+  },
+  {
+    "id": "shoulder_rolls",
+    "name": "Shoulder Rolls",
+    "instruction": "Roll your shoulders forward and backward in a smooth circular motion.",
+    "motivation": "Open your upper body and reduce stiffness.",
+    "durationSeconds": 20,
+    "emoji": "💪"
+  },
+  {
+    "id": "hand_stretch",
+    "name": "Hand Stretch",
+    "instruction": "Extend one arm forward, gently pull the fingers back, then switch hands.",
+    "motivation": "Give your wrists and hands a quick reset.",
+    "durationSeconds": 20,
+    "emoji": "✋"
+  },
+  {
+    "id": "knee_raise_right",
+    "name": "Knee Raise Right",
+    "instruction": "Stand upright, raise your right knee toward your chest, lower, and repeat with control.",
+    "motivation": "Engage your hips and improve balance.",
+    "durationSeconds": 20,
+    "emoji": "🦵"
+  },
+  {
+    "id": "back_twist",
+    "name": "Back Twist",
+    "instruction": "Sit or stand tall, rotate your torso gently to each side while keeping your hips stable.",
+    "motivation": "Refresh your lower back and posture.",
+    "durationSeconds": 25,
+    "emoji": "🔄"
+  },
+  {
+    "id": "calf_raise",
+    "name": "Calf Raise",
+    "instruction": "Lift your heels, pause at the top, and slowly lower back down.",
+    "motivation": "Boost lower-leg circulation during the workday.",
+    "durationSeconds": 20,
+    "emoji": "🦶"
+  },
+  {
+    "id": "seated_leg_extension",
+    "name": "Seated Leg Extension",
+    "instruction": "While seated, extend one leg fully, hold briefly, lower, and switch sides.",
+    "motivation": "Wake up your legs without leaving your desk.",
+    "durationSeconds": 25,
+    "emoji": "🪑"
+  },
+  {
+    "id": "upper_back_stretch",
+    "name": "Upper Back Stretch",
+    "instruction": "Clasp your hands in front, round the upper back slightly, and breathe into the stretch.",
+    "motivation": "Counter rounded shoulders and desk posture.",
+    "durationSeconds": 20,
+    "emoji": "🫧"
+  },
+  {
+    "id": "ankle_circles",
+    "name": "Ankle Circles",
+    "instruction": "Lift one foot and make slow circles with your ankle, then switch sides.",
+    "motivation": "Improve ankle mobility and reduce stiffness.",
+    "durationSeconds": 20,
+    "emoji": "⭕"
+  },
+  {
+    "id": "torso_side_twist",
+    "name": "Torso Side Twist",
+    "instruction": "Stand with feet grounded and rotate your torso side to side in a relaxed rhythm.",
+    "motivation": "Re-energize your midsection and back.",
+    "durationSeconds": 25,
+    "emoji": "🌪"
+  },
+  {
+    "id": "seated_marching",
+    "name": "Seated Marching",
+    "instruction": "Sit tall and lift your knees one by one as if marching in place.",
+    "motivation": "Get your blood flowing even in a short break.",
+    "durationSeconds": 30,
+    "emoji": "🥁"
+  },
+  {
+    "id": "wrist_rotations",
+    "name": "Wrist Rotations",
+    "instruction": "Extend your hands forward and rotate your wrists both directions slowly.",
+    "motivation": "Ease wrist tension from keyboard and mouse use.",
+    "durationSeconds": 20,
+    "emoji": "⌚"
+  },
+  {
+    "id": "forward_fold",
+    "name": "Forward Fold",
+    "instruction": "Stand tall, hinge at the hips, and fold forward comfortably while relaxing your neck.",
+    "motivation": "Lengthen your back body and calm your mind.",
+    "durationSeconds": 25,
+    "emoji": "⬇️"
+  },
+  {
+    "id": "arm_circles",
+    "name": "Arm Circles",
+    "instruction": "Extend your arms sideways and draw controlled circles forward and backward.",
+    "motivation": "Warm up your shoulders and upper arms.",
+    "durationSeconds": 20,
+    "emoji": "🔵"
+  },
+  {
+    "id": "shoulder_shrugs",
+    "name": "Shoulder Shrugs",
+    "instruction": "Lift your shoulders toward your ears, hold briefly, then release fully.",
+    "motivation": "Let go of tension and reset your posture.",
+    "durationSeconds": 15,
+    "emoji": "⬆️"
+  },
+  {
+    "id": "glute_squeeze",
+    "name": "Glute Squeeze",
+    "instruction": "While sitting or standing, squeeze your glutes, hold briefly, then relax.",
+    "motivation": "Activate muscles that get lazy during long sitting sessions.",
+    "durationSeconds": 15,
+    "emoji": "🔥"
+  }
+]
