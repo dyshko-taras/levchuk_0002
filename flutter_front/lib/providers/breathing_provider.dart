@@ -131,6 +131,16 @@ class BreathingProvider extends ChangeNotifier {
     );
   }
 
+  Future<void> applyReminderPreset() async {
+    await update(
+      const BreathingSettings(
+        durationMinutes: 3,
+        mode: BreathingMode.focus,
+        soundEnabled: true,
+      ),
+    );
+  }
+
   void startSession() {
     if (_sessionRunning) {
       return;

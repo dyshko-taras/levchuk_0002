@@ -492,10 +492,10 @@ Exit criteria:
 
 Checklist:
 
-- [ ] Integrate `flutter_local_notifications`.
-- [ ] Integrate `permission_handler`.
-- [ ] Implement rationale dialogs and scheduling logic.
-- [ ] Sync toggles with actual permission state.
+- [x] Integrate `flutter_local_notifications`.
+- [x] Integrate `permission_handler`.
+- [x] Implement rationale dialogs and scheduling logic.
+- [x] Sync toggles with actual permission state.
 
 Exit criteria:
 
@@ -529,7 +529,7 @@ This section is the operational checklist we will update while implementing the 
 - [x] Phase 3. Providers and bootstrap
 - [x] Phase 4. Core UI transfer
 - [x] Phase 5. Interactive exercise flows
-- [ ] Phase 6. Notifications and permissions
+- [x] Phase 6. Notifications and permissions
 - [ ] Phase 7. Debug tooling and finish
 
 ### Immediate next step
