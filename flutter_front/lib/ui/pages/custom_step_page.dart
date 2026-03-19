@@ -72,7 +72,7 @@ class _CustomStepPageState extends State<CustomStepPage> {
                   children: [
                     const ScreenHeader(
                       title: 'Custom Step',
-                      showBack: true,
+                      showClose: true,
                     ),
                     Padding(
                       padding: Insets.screen,
@@ -147,6 +147,14 @@ class _CustomStepPageState extends State<CustomStepPage> {
       errorText: errorText,
       filled: true,
       fillColor: AppColors.darkCard,
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.red, width: 2),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.red, width: 2),
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -173,9 +181,9 @@ class _CustomStepPageState extends State<CustomStepPage> {
                     AppSpacing.md,
                     0,
                   ),
-                  child: Row(
-                    children: [
-                      TextButton(
+                        child: Row(
+                          children: [
+                            TextButton(
                         onPressed: () => Navigator.of(context).pop(),
                         child: Text(
                           'Cancel',
@@ -187,7 +195,11 @@ class _CustomStepPageState extends State<CustomStepPage> {
                         onPressed: () {
                           setState(() {
                             _selectedDuration = tempDuration;
-                            _durationError = null;
+                            _durationError =
+                                _selectedDuration.inSeconds < 5 ||
+                                    _selectedDuration.inSeconds > 300
+                                ? 'Duration must be between 00:05 and 05:00.'
+                                : null;
                           });
                           Navigator.of(context).pop();
                         },

@@ -63,6 +63,9 @@ class NotificationService {
   }
 
   void _log(String message) {
+    if (!kDebugMode) {
+      return;
+    }
     developer.log('[NotificationService] $message');
     debugPrint('[NotificationService] $message');
   }

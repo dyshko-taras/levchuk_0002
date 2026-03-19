@@ -35,7 +35,10 @@ class MainShellPage extends StatelessWidget {
         unawaited(_handleShellBack(context, navigationShell));
       },
       child: Scaffold(
-        body: navigationShell,
+        body: SafeArea(
+          bottom: false,
+          child: navigationShell,
+        ),
         bottomNavigationBar: AppBottomNavBar(
           currentIndex: navigationShell.currentIndex,
           onTap: (index) {

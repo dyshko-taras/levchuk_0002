@@ -12,6 +12,7 @@ class ScreenHeader extends StatelessWidget {
     super.key,
     this.subtitle,
     this.showBack = false,
+    this.showClose = false,
     this.showGear = false,
     this.accentColor = ScreenHeaderAccent.blue,
     this.rightIcon,
@@ -21,6 +22,7 @@ class ScreenHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
   final bool showBack;
+  final bool showClose;
   final bool showGear;
   final ScreenHeaderAccent accentColor;
   final String? rightIcon;
@@ -33,13 +35,13 @@ class ScreenHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showBack)
+          if (showBack || showClose)
             Padding(
               padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
               child: InkWell(
                 onTap: () => context.pop(),
                 child: Text(
-                  '◄ Back',
+                  showClose ? '✕ Close' : '◄ Back',
                   style: AppFonts.body(color: Colors.white),
                 ),
               ),
@@ -49,6 +51,8 @@ class ScreenHeader extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppFonts.display(
                     color: AppColors.primaryBlue,
                   ),
@@ -69,6 +73,8 @@ class ScreenHeader extends StatelessWidget {
           if (subtitle != null)
             Text(
               subtitle!,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: AppFonts.body(
                 size: 13,
                 color: AppColors.textGray2,

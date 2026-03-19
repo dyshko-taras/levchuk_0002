@@ -20,10 +20,9 @@ class WorkoutPage extends StatelessWidget {
     final workoutProvider = context.watch<WorkoutProvider>();
 
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: [
             const ScreenHeader(
               title: 'Create Workout',
               subtitle: 'Build your personalized desk routine',
@@ -177,8 +176,7 @@ class WorkoutPage extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }

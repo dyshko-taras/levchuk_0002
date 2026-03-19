@@ -5,8 +5,6 @@ abstract final class PrefKeys {
   static const hourlyReminders = 'settings.hourly_reminders';
   static const breathingReminders = 'settings.breathing_reminders';
   static const soundEnabled = 'settings.sound_enabled';
-  static const devicePreviewEnabled = 'settings.device_preview_enabled';
-  static const demoDataEnabled = 'settings.demo_data_enabled';
   static const userProgress = 'storage.user_progress';
   static const breathingSettings = 'storage.breathing_settings';
   static const customWorkouts = 'storage.custom_workouts';

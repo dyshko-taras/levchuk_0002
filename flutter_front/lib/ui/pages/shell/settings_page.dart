@@ -3,14 +3,10 @@ import 'package:FlutterApp/constants/app_strings.dart';
 import 'package:FlutterApp/providers/routine_provider.dart';
 import 'package:FlutterApp/providers/settings_provider.dart';
 import 'package:FlutterApp/providers/workout_provider.dart';
-import 'package:FlutterApp/services/notification_service.dart';
 import 'package:FlutterApp/ui/theme/app_colors.dart';
 import 'package:FlutterApp/ui/theme/app_fonts.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -20,12 +16,11 @@ class SettingsPage extends StatelessWidget {
     final settings = context.watch<SettingsProvider>();
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: Insets.screen,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: SingleChildScrollView(
+        padding: Insets.screen,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
               Gaps.hSm,
               Text(
                 AppStrings.settingsTitle,
@@ -61,32 +56,23 @@ class SettingsPage extends StatelessWidget {
                     settings.setSoundEnabled(value: value),
               ),
               Gaps.hXs,
-              _ToggleRow(
-                label: 'Demo Data',
-                value: settings.demoDataEnabled,
-                onChanged: (value) => _handleDemoDataToggle(context, value),
-              ),
-              if (kDebugMode) ...[
-                Gaps.hXs,
-                _ToggleRow(
-                  label: AppStrings.devicePreviewLabel,
-                  value: settings.devicePreviewEnabled,
-                  onChanged: (value) async {
-                    final store = Provider.of<DevicePreviewStore?>(
-                      context,
-                      listen: false,
-                    );
-                    if (store != null) {
-                      store.data = store.data.copyWith(
-                        isEnabled: value,
-                        isToolbarVisible: value,
-                        isFrameVisible: value,
-                      );
-                    }
-                    await settings.setDevicePreviewEnabled(value: value);
-                  },
+              OutlinedButton(
+                onPressed: () => _confirmGenerateSampleData(context),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(52),
+                  side: const BorderSide(
+                    color: AppColors.greenStart,
+                    width: 3,
+                  ),
                 ),
-              ],
+                child: Text(
+                  'Generate Sample Data',
+                  style: AppFonts.body(
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               Gaps.hXl,
               Text(
                 'About',
@@ -115,24 +101,9 @@ class SettingsPage extends StatelessWidget {
                 style: AppFonts.body(color: AppColors.textGray),
                 textAlign: TextAlign.center,
               ),
-              Gaps.hXl,
-              FilledButton(
-                onPressed: () => _sendTestNotification(context),
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(52),
-                  backgroundColor: AppColors.primaryBlue,
-                ),
-                child: Text(
-                  'Send Test Notification',
-                  style: AppFonts.body(
-                    weight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
               Gaps.hSm,
               OutlinedButton(
-                onPressed: _shareApp,
+                onPressed: null,
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                   side: const BorderSide(
@@ -141,7 +112,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Share App',
+                  'Support',
                   style: AppFonts.body(
                     weight: FontWeight.w700,
                     color: Colors.white,
@@ -174,7 +145,7 @@ class SettingsPage extends StatelessWidget {
                   backgroundColor: AppColors.red,
                 ),
                 child: Text(
-                  'Reset Progress',
+                  'Delete User Data',
                   style: AppFonts.body(
                     weight: FontWeight.w700,
                     color: Colors.white,
@@ -182,8 +153,7 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
               Gaps.hLg,
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -306,7 +276,7 @@ class SettingsPage extends StatelessWidget {
             return AlertDialog(
               backgroundColor: AppColors.darkCard,
               title: Text(
-                'Reset Progress',
+                'Delete User Data',
                 style: AppFonts.display(size: 20, color: Colors.white),
               ),
               content: Column(
@@ -314,7 +284,7 @@ class SettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Type RESET to clear daily progress and custom workouts.',
+                    'Type RESET to delete your progress and custom workouts.',
                     style: AppFonts.body(color: AppColors.textGray),
                   ),
                   Gaps.hSm,
@@ -372,123 +342,63 @@ class SettingsPage extends StatelessWidget {
     await workoutProvider.clearAll();
   }
 
-  Future<void> _handleDemoDataToggle(BuildContext context, bool value) async {
-    final settings = context.read<SettingsProvider>();
+  Future<void> _confirmGenerateSampleData(BuildContext context) async {
     final routineProvider = context.read<RoutineProvider>();
     final workoutProvider = context.read<WorkoutProvider>();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.darkCard,
+        title: Text(
+          'Generate Sample Data',
+          style: AppFonts.display(size: 20, color: Colors.white),
+        ),
+        content: Text(
+          'This will delete your current progress and custom workouts, then '
+          'replace them with realistic sample data.',
+          style: AppFonts.body(color: AppColors.textGray),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(
+              'Cancel',
+              style: AppFonts.body(color: AppColors.textGray3),
+            ),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              'Generate',
+              style: AppFonts.body(
+                weight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
 
-    if (value) {
-      await settings.setDemoDataEnabled(value: true);
-      await routineProvider.applyDemoData();
-      await workoutProvider.applyDemoData();
+    if (confirmed != true || !context.mounted) {
       return;
     }
 
-    await settings.setDemoDataEnabled(value: false);
     await routineProvider.clearAllProgress();
     await workoutProvider.clearAll();
-  }
-
-  Future<void> _sendTestNotification(BuildContext context) async {
-    final notificationService = context.read<NotificationService>();
-    final settings = context.read<SettingsProvider>();
-    final permissionGranted = await notificationService
-        .areNotificationsEnabledSystem();
+    await routineProvider.applyDemoData();
+    await workoutProvider.applyDemoData();
 
     if (!context.mounted) {
       return;
     }
 
-    if (!permissionGranted) {
-      final allow = await showDialog<bool>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          backgroundColor: AppColors.darkCard,
-          title: Text(
-            'Allow test notification?',
-            style: AppFonts.display(size: 20, color: Colors.white),
-          ),
-          content: Text(
-            'ActiveOffice needs notification permission to send a system test '
-            'notification.',
-            style: AppFonts.body(color: AppColors.textGray),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: Text(
-                'Cancel',
-                style: AppFonts.body(color: AppColors.textGray3),
-              ),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: Text(
-                'Allow',
-                style: AppFonts.body(
-                  weight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Sample data generated.',
+          style: AppFonts.body(color: Colors.white),
         ),
-      );
-
-      if (allow != true || !context.mounted) {
-        return;
-      }
-
-      final requested = await notificationService
-          .requestNotificationPermission();
-
-      if (!context.mounted) {
-        return;
-      }
-
-      if (!requested) {
-        await showDialog<void>(
-          context: context,
-          builder: (dialogContext) => AlertDialog(
-            backgroundColor: AppColors.darkCard,
-            title: Text(
-              'Notifications blocked',
-              style: AppFonts.display(size: 20, color: Colors.white),
-            ),
-            content: Text(
-              'Notification permission is required to show the system test '
-              'notification.',
-              style: AppFonts.body(color: AppColors.textGray),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(),
-                child: Text(
-                  'Close',
-                  style: AppFonts.body(color: AppColors.textGray3),
-                ),
-              ),
-            ],
-          ),
-        );
-        return;
-      }
-
-      await settings.refreshNotificationPermissionState(syncSchedules: true);
-    } else {
-      await settings.refreshNotificationPermissionState(syncSchedules: true);
-    }
-
-    await notificationService.showTestNotification();
-  }
-
-  Future<void> _shareApp() {
-    return SharePlus.instance.share(
-      ShareParams(
-        text:
-            'Try ActiveOffice for hourly stretches, breathing breaks, and '
-            'desk workouts.',
-        subject: 'ActiveOffice',
       ),
     );
   }

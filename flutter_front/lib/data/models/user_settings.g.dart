@@ -10,7 +10,6 @@ UserSettings _$UserSettingsFromJson(Map<String, dynamic> json) => UserSettings(
   hourlyReminders: json['hourlyReminders'] as bool,
   breathingReminders: json['breathingReminders'] as bool,
   soundEnabled: json['soundEnabled'] as bool,
-  devicePreviewEnabled: json['devicePreviewEnabled'] as bool,
 );
 
 Map<String, dynamic> _$UserSettingsToJson(UserSettings instance) =>
@@ -18,5 +17,4 @@ Map<String, dynamic> _$UserSettingsToJson(UserSettings instance) =>
       'hourlyReminders': instance.hourlyReminders,
       'breathingReminders': instance.breathingReminders,
       'soundEnabled': instance.soundEnabled,
-      'devicePreviewEnabled': instance.devicePreviewEnabled,
     };

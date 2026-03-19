@@ -88,7 +88,7 @@ class _BreathingSettingsPageState extends State<BreathingSettingsPage> {
           children: [
             const ScreenHeader(
               title: 'Settings Panel',
-              showBack: true,
+              showClose: true,
             ),
             Expanded(
               child: ListView(

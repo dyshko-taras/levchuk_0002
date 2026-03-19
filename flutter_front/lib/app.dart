@@ -18,7 +18,6 @@ import 'package:FlutterApp/providers/tips_provider.dart';
 import 'package:FlutterApp/providers/workout_provider.dart';
 import 'package:FlutterApp/services/notification_service.dart';
 import 'package:FlutterApp/ui/theme/app_theme.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -117,7 +116,6 @@ class _AppShell extends StatefulWidget {
 
 class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
   StreamSubscription<String>? _notificationSubscription;
-  bool _demoStateSynced = false;
 
   @override
   void initState() {
@@ -144,51 +142,16 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
         unawaited(_handleNotificationPayload(pendingPayload));
       });
     }
-
-    if (!_demoStateSynced) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) {
-          return;
-        }
-        unawaited(_syncDemoDataState());
-      });
-    }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      unawaited(_syncDemoDataState());
       unawaited(
         context.read<SettingsProvider>().refreshNotificationPermissionState(
           syncSchedules: true,
         ),
       );
-    } else if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.hidden) {}
-  }
-
-  Future<void> _syncDemoDataState() async {
-    final settings = context.read<SettingsProvider>();
-    final routineProvider = context.read<RoutineProvider>();
-    final workoutProvider = context.read<WorkoutProvider>();
-
-    if (!settings.loaded ||
-        !routineProvider.loaded ||
-        !workoutProvider.loaded) {
-      return;
-    }
-
-    _demoStateSynced = true;
-
-    if (settings.demoDataEnabled) {
-      if (routineProvider.userProgress.dailyProgress.isEmpty) {
-        await routineProvider.applyDemoData();
-      }
-      if (workoutProvider.savedWorkouts.isEmpty && !workoutProvider.hasDraft) {
-        await workoutProvider.applyDemoData();
-      }
     }
   }
 
@@ -220,8 +183,6 @@ class _AppShellState extends State<_AppShell> with WidgetsBindingObserver {
       title: 'ActiveOffice',
       theme: AppTheme.dark,
       routerConfig: AppRouter.router,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
     );
   }
 }

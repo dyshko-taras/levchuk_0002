@@ -20,9 +20,8 @@ class QuotesPage extends StatelessWidget {
         quotesProvider.currentQuote ?? quotesProvider.quoteOfTheDay;
 
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
+      body: Stack(
+        children: [
             Positioned.fill(
               child: Opacity(
                 opacity: 0.15,
@@ -33,9 +32,9 @@ class QuotesPage extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
                 const ScreenHeader(
                   title: 'Inspiring Quotes',
                   accentColor: ScreenHeaderAccent.purple,
@@ -66,6 +65,8 @@ class QuotesPage extends StatelessWidget {
                                 activeQuote == null
                                     ? 'No quote available.'
                                     : '"${activeQuote.text}"',
+                                maxLines: 6,
+                                overflow: TextOverflow.ellipsis,
                                 style: AppFonts.body(
                                   size: 16,
                                   color: Colors.white,
@@ -78,6 +79,8 @@ class QuotesPage extends StatelessWidget {
                                   activeQuote == null
                                       ? '—'
                                       : '— ${activeQuote.author}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: AppFonts.body(
                                     size: 13,
                                     color: AppColors.purpleStart,
@@ -131,9 +134,8 @@ class QuotesPage extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -158,6 +160,8 @@ class QuotesPage extends StatelessWidget {
             children: [
               Text(
                 'Past quotes',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: AppFonts.display(size: 20, color: Colors.white),
               ),
               Gaps.hSm,
@@ -185,11 +189,15 @@ class QuotesPage extends StatelessWidget {
                           children: [
                             Text(
                               '"${quote.text}"',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                               style: AppFonts.body(color: Colors.white),
                             ),
                             Gaps.hXs,
                             Text(
                               '— ${quote.author}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: AppFonts.body(
                                 size: 13,
                                 color: AppColors.purpleStart,

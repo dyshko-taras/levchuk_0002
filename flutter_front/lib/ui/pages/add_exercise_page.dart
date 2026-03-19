@@ -97,7 +97,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
           children: [
             const ScreenHeader(
               title: 'Add Exercise',
-              showBack: true,
+              showClose: true,
             ),
             Expanded(
               child: Padding(
@@ -173,6 +173,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                                   Expanded(
                                     child: Text(
                                       '${exercise.emoji} ${exercise.name}',
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: AppFonts.body(color: Colors.white),
                                     ),

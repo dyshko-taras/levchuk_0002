@@ -14,8 +14,6 @@ class SettingsProvider extends ChangeNotifier {
   bool _hourlyReminders = true;
   bool _breathingReminders = true;
   bool _soundEnabled = false;
-  bool _devicePreviewEnabled = false;
-  bool _demoDataEnabled = false;
   PermissionStatus _notificationPermissionStatus = PermissionStatus.denied;
   bool _showHourlyWarning = false;
   bool _showBreathingWarning = false;
@@ -24,8 +22,6 @@ class SettingsProvider extends ChangeNotifier {
   bool get hourlyReminders => _hourlyReminders;
   bool get breathingReminders => _breathingReminders;
   bool get soundEnabled => _soundEnabled;
-  bool get devicePreviewEnabled => _devicePreviewEnabled;
-  bool get demoDataEnabled => _demoDataEnabled;
   bool get showHourlyWarning => _showHourlyWarning;
   bool get showBreathingWarning => _showBreathingWarning;
   bool get notificationsGranted => _notificationPermissionStatus.isGranted;
@@ -43,11 +39,6 @@ class SettingsProvider extends ChangeNotifier {
         await PrefsStore.instance.readBool(PrefKeys.breathingReminders) ?? true;
     _soundEnabled =
         await PrefsStore.instance.readBool(PrefKeys.soundEnabled) ?? false;
-    _devicePreviewEnabled =
-        await PrefsStore.instance.readBool(PrefKeys.devicePreviewEnabled) ??
-        false;
-    _demoDataEnabled =
-        await PrefsStore.instance.readBool(PrefKeys.demoDataEnabled) ?? false;
 
     _loaded = true;
     await refreshNotificationPermissionState(syncSchedules: true);
@@ -97,30 +88,6 @@ class SettingsProvider extends ChangeNotifier {
       value: value,
     );
     await _syncSchedules();
-  }
-
-  Future<void> setDevicePreviewEnabled({required bool value}) async {
-    if (_devicePreviewEnabled == value) {
-      return;
-    }
-    _devicePreviewEnabled = value;
-    notifyListeners();
-    await PrefsStore.instance.saveBool(
-      PrefKeys.devicePreviewEnabled,
-      value: value,
-    );
-  }
-
-  Future<void> setDemoDataEnabled({required bool value}) async {
-    if (_demoDataEnabled == value) {
-      return;
-    }
-    _demoDataEnabled = value;
-    notifyListeners();
-    await PrefsStore.instance.saveBool(
-      PrefKeys.demoDataEnabled,
-      value: value,
-    );
   }
 
   Future<void> refreshNotificationPermissionState({

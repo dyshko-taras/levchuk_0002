@@ -21,7 +21,6 @@ abstract final class AppStrings {
   static const placeholderNextStep =
       'Feature logic and screen details will be implemented in the next '
       'phases.';
-  static const devicePreviewLabel = 'Device Preview';
   static const hourlyRemindersLabel = 'Hourly Reminders';
   static const breathingRemindersLabel = 'Breathing Reminders';
   static const soundLabel = 'Sound';

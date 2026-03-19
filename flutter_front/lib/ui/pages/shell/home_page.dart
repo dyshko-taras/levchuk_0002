@@ -28,12 +28,11 @@ class HomePage extends StatelessWidget {
         : tipsProvider.topics.first.id;
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: Insets.screen,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: SingleChildScrollView(
+        padding: Insets.screen,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
               Gaps.hSm,
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
@@ -102,13 +101,20 @@ class HomePage extends StatelessWidget {
                           Expanded(
                             child: Text(
                               item.label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: AppFonts.body(color: Colors.white),
                             ),
                           ),
-                          Text(
-                            '${item.exercise.name} '
-                            '${routineProvider.statusEmojiForHour(hour)}  ►',
-                            style: AppFonts.body(color: Colors.white),
+                          Flexible(
+                            child: Text(
+                              '${item.exercise.name} '
+                              '${routineProvider.statusEmojiForHour(hour)}  ►',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.end,
+                              style: AppFonts.body(color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
@@ -194,8 +200,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Gaps.hLg,
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -286,14 +291,25 @@ class _ProgressRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(
-            child: Text(label, style: AppFonts.body(color: Colors.white)),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppFonts.body(color: Colors.white),
+            ),
           ),
-          Text(
-            value,
-            style: AppFonts.body(
-              weight: FontWeight.w700,
-              color: AppColors.greenStart,
+          Gaps.wSm,
+          Flexible(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: AppFonts.body(
+                weight: FontWeight.w700,
+                color: AppColors.greenStart,
+              ),
             ),
           ),
         ],

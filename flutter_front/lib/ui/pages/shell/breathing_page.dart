@@ -93,10 +93,9 @@ class _BreathingPageState extends State<BreathingPage> {
               ),
             ),
           ),
-          SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       minHeight: constraints.maxHeight,
@@ -215,7 +214,6 @@ class _BreathingPageState extends State<BreathingPage> {
                   ),
                 );
               },
-            ),
           ),
         ],
       ),

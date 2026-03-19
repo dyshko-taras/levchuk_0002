@@ -8,14 +8,12 @@ class UserSettings {
     required this.hourlyReminders,
     required this.breathingReminders,
     required this.soundEnabled,
-    required this.devicePreviewEnabled,
   });
 
   factory UserSettings.defaults() => const UserSettings(
     hourlyReminders: true,
     breathingReminders: true,
     soundEnabled: false,
-    devicePreviewEnabled: false,
   );
 
   factory UserSettings.fromJson(Map<String, dynamic> json) =>
@@ -24,7 +22,6 @@ class UserSettings {
   final bool hourlyReminders;
   final bool breathingReminders;
   final bool soundEnabled;
-  final bool devicePreviewEnabled;
 
   Map<String, dynamic> toJson() => _$UserSettingsToJson(this);
 }

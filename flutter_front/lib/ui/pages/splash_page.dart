@@ -8,8 +8,6 @@ import 'package:FlutterApp/providers/app_bootstrap_provider.dart';
 import 'package:FlutterApp/providers/settings_provider.dart';
 import 'package:FlutterApp/ui/theme/app_colors.dart';
 import 'package:FlutterApp/ui/theme/app_fonts.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -50,17 +48,6 @@ class _SplashPageState extends State<SplashPage>
 
     if (!settings.loaded) {
       await settings.load();
-    }
-
-    if (kDebugMode && mounted) {
-      final store = Provider.of<DevicePreviewStore?>(context, listen: false);
-      if (store != null) {
-        store.data = store.data.copyWith(
-          isEnabled: settings.devicePreviewEnabled,
-          isToolbarVisible: settings.devicePreviewEnabled,
-          isFrameVisible: settings.devicePreviewEnabled,
-        );
-      }
     }
 
     if (!bootstrap.isReady) {

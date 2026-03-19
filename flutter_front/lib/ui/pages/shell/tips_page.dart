@@ -18,15 +18,14 @@ class TipsPage extends StatelessWidget {
     final tipsProvider = context.watch<TipsProvider>();
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            const ScreenHeader(
-              title: 'Wellness Tips',
-              showGear: true,
-            ),
-            Expanded(
-              child: ListView.separated(
+      body: Column(
+        children: [
+          const ScreenHeader(
+            title: 'Wellness Tips',
+            showGear: true,
+          ),
+          Expanded(
+            child: ListView.separated(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding,
                   AppSpacing.md,
@@ -67,6 +66,8 @@ class TipsPage extends StatelessWidget {
                                     children: [
                                       Text(
                                         topic.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: AppFonts.body(
                                           size: 16,
                                           weight: FontWeight.w700,
@@ -76,6 +77,8 @@ class TipsPage extends StatelessWidget {
                                       Gaps.hXs,
                                       Text(
                                         topic.shortDescription,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                         style: AppFonts.body(
                                           size: 13,
                                           color: AppColors.textGray,
@@ -113,10 +116,9 @@ class TipsPage extends StatelessWidget {
                     ),
                   );
                 },
-              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
