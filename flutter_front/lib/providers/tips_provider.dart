@@ -18,10 +18,6 @@ class TipsProvider extends ChangeNotifier {
   List<WellnessTopic> get topics => _topics;
 
   Future<void> load() async {
-    if (_loaded) {
-      return;
-    }
-
     _topics = await _tipsRepository.loadTopics();
     _loaded = true;
     notifyListeners();

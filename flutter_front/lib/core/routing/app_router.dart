@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import '../../constants/app_routes.dart';
 import '../../ui/pages/breathing_settings_page.dart';
 import '../../ui/pages/exercise_page.dart';
-import '../../ui/pages/placeholder_page.dart';
+import '../../ui/pages/quotes_page.dart';
 import '../../ui/pages/settings_page.dart';
+import '../../ui/pages/tip_detail_page.dart';
+import '../../ui/pages/tips_page.dart';
+import '../../ui/pages/placeholder_page.dart';
 import '../../ui/pages/shell/home_page.dart';
 import '../../ui/pages/shell/main_shell_page.dart';
 import '../../ui/pages/splash_page.dart';
@@ -45,10 +48,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.tips,
-                builder: (_, __) => const PlaceholderPage(
-                  title: 'Wellness Tips',
-                  subtitle: 'Tips list will be implemented in Phase 4.',
-                ),
+                builder: (_, __) => const TipsPage(),
               ),
             ],
           ),
@@ -67,10 +67,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.quotes,
-                builder: (_, __) => const PlaceholderPage(
-                  title: 'Inspiring Quotes',
-                  subtitle: 'Quotes flow will be implemented in Phase 4.',
-                ),
+                builder: (_, __) => const QuotesPage(),
               ),
             ],
           ),
@@ -116,11 +113,8 @@ class AppRouter {
       ),
       GoRoute(
         path: '${AppRoutes.tips}/:topicId',
-        builder: (_, state) => PlaceholderPage(
-          title: 'Tip Detail',
-          subtitle:
-              'Topic "${state.pathParameters['topicId']}" will be implemented in Phase 4.',
-        ),
+        builder: (_, state) =>
+            TipDetailPage(topicId: state.pathParameters['topicId'] ?? ''),
       ),
       GoRoute(
         path: AppRoutes.breathingSettings,

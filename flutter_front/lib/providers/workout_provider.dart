@@ -27,10 +27,6 @@ class WorkoutProvider extends ChangeNotifier {
   List<WorkoutStep> get draftSteps => _draftSteps;
 
   Future<void> load() async {
-    if (_loaded) {
-      return;
-    }
-
     _savedWorkouts = await _workoutRepository.loadAll();
     _availableExercises = await _exerciseRepository.loadExercises();
     _loaded = true;
@@ -64,5 +60,12 @@ class WorkoutProvider extends ChangeNotifier {
     _savedWorkouts = [..._savedWorkouts, workout];
     notifyListeners();
     await _workoutRepository.saveAll(_savedWorkouts);
+  }
+
+  Future<void> clearAll() async {
+    _savedWorkouts = const [];
+    _draftSteps = const [];
+    notifyListeners();
+    await _workoutRepository.clear();
   }
 }

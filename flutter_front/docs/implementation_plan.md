@@ -468,8 +468,8 @@ Exit criteria:
 
 Checklist:
 
-- [ ] Implement Welcome, Home, Tips, Tip Detail, Quotes, Settings.
-- [ ] Implement shared components and exact visual language from mockup.
+- [x] Implement Welcome, Home, Tips, Tip Detail, Quotes, Settings.
+- [x] Implement shared components and exact visual language from mockup.
 
 Exit criteria:
 
@@ -527,7 +527,7 @@ This section is the operational checklist we will update while implementing the 
 - [x] Phase 1. Foundation
 - [x] Phase 2. Models, storage, repositories
 - [x] Phase 3. Providers and bootstrap
-- [ ] Phase 4. Core UI transfer
+- [x] Phase 4. Core UI transfer
 - [ ] Phase 5. Interactive exercise flows
 - [ ] Phase 6. Notifications and permissions
 - [ ] Phase 7. Debug tooling and finish
@@ -537,7 +537,8 @@ This section is the operational checklist we will update while implementing the 
 - [x] Start Phase 1 by replacing the starter Flutter counter app with the project foundation
 - [x] Start Phase 2 by adding bundled data models, local asset loading, and repositories
 - [x] Start Phase 3 by binding repositories into domain providers and replacing foundation placeholders with live startup state
-- [ ] Start Phase 4 by replacing tab placeholders with full mockup-driven UI for Welcome, Home, Tips, Tip Detail, Quotes, and Settings
+- [x] Start Phase 4 by replacing tab placeholders with full mockup-driven UI for Welcome, Home, Tips, Tip Detail, Quotes, and Settings
+- [ ] Start Phase 5 by implementing the interactive exercise, breathing, and workout flows with timers, validation, and completion handling
 
 ---
 

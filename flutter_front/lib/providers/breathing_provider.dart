@@ -17,9 +17,6 @@ class BreathingProvider extends ChangeNotifier {
   BreathingSettings get settings => _settings;
 
   Future<void> load() async {
-    if (_loaded) {
-      return;
-    }
     _settings = await _repository.load();
     _loaded = true;
     notifyListeners();

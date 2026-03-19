@@ -62,10 +62,6 @@ class RoutineProvider extends ChangeNotifier {
   }
 
   Future<void> load() async {
-    if (_loaded) {
-      return;
-    }
-
     _hourlyRoutine = await _exerciseRepository.loadHourlyRoutine();
     _userProgress = await _progressRepository.load();
     _loaded = true;
@@ -111,5 +107,11 @@ class RoutineProvider extends ChangeNotifier {
     _userProgress = UserProgress(dailyProgress: updated);
     notifyListeners();
     await _progressRepository.save(_userProgress);
+  }
+
+  Future<void> clearAllProgress() async {
+    _userProgress = UserProgress.empty();
+    notifyListeners();
+    await _progressRepository.clear();
   }
 }

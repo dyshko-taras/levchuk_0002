@@ -34,10 +34,6 @@ class QuotesProvider extends ChangeNotifier {
   }
 
   Future<void> load() async {
-    if (_loaded) {
-      return;
-    }
-
     _quotes = await _quotesRepository.loadQuotes();
     _loaded = true;
     notifyListeners();

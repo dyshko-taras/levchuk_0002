@@ -17,6 +17,7 @@ abstract final class AppColors {
   static const redLight = Color(0xFFFF6565);
   static const textGray = Color(0xFF7C89A7);
   static const textGray2 = Color(0xFF5A6C99);
+  static const textGray3 = Color(0xFF8B9ABA);
   static const overlayLight = Color(0x0DFFFFFF);
   static const overlayMedium = Color(0x26FFFFFF);
 }
