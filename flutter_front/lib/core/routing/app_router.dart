@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../constants/app_routes.dart';
+import '../../ui/pages/breathing_settings_page.dart';
+import '../../ui/pages/exercise_page.dart';
+import '../../ui/pages/placeholder_page.dart';
+import '../../ui/pages/settings_page.dart';
+import '../../ui/pages/shell/home_page.dart';
+import '../../ui/pages/shell/main_shell_page.dart';
+import '../../ui/pages/splash_page.dart';
+import '../../ui/pages/welcome_page.dart';
+
+class AppRouter {
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final _homeNavigatorKey = GlobalKey<NavigatorState>();
+
+  static final router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    initialLocation: AppRoutes.splash,
+    routes: [
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (_, __) => const SplashPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.welcome,
+        builder: (_, __) => const WelcomePage(),
+      ),
+      StatefulShellRoute.indexedStack(
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state, navigationShell) =>
+            MainShellPage(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            navigatorKey: _homeNavigatorKey,
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (_, __) => const HomePage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.tips,
+                builder: (_, __) => const PlaceholderPage(
+                  title: 'Wellness Tips',
+                  subtitle: 'Tips list will be implemented in Phase 4.',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.breathe,
+                builder: (_, __) => const PlaceholderPage(
+                  title: 'Focus Breathing',
+                  subtitle: 'Breathing flow will be implemented in Phase 5.',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.quotes,
+                builder: (_, __) => const PlaceholderPage(
+                  title: 'Inspiring Quotes',
+                  subtitle: 'Quotes flow will be implemented in Phase 4.',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.workout,
+                builder: (_, __) => const PlaceholderPage(
+                  title: 'Create Workout',
+                  subtitle: 'Workout flow will be implemented in Phase 5.',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.settings,
+                builder: (_, __) => const SettingsPage(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '${AppRoutes.exercise}/:hour',
+        builder: (_, state) =>
+            ExercisePage(hour: int.tryParse(state.pathParameters['hour'] ?? '') ?? 1),
+      ),
+      GoRoute(
+        path: AppRoutes.addExercise,
+        builder: (_, __) => const PlaceholderPage(
+          title: 'Add Exercise',
+          subtitle: 'Workout exercise selection will be implemented in Phase 5.',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.customStep,
+        builder: (_, __) => const PlaceholderPage(
+          title: 'Custom Step',
+          subtitle: 'Custom step validation will be implemented in Phase 5.',
+        ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.tips}/:topicId',
+        builder: (_, state) => PlaceholderPage(
+          title: 'Tip Detail',
+          subtitle:
+              'Topic "${state.pathParameters['topicId']}" will be implemented in Phase 4.',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.breathingSettings,
+        builder: (_, __) => const BreathingSettingsPage(),
+      ),
+    ],
+  );
+}

@@ -1,0 +1,51 @@
+# App Configuration
+app:
+  name: '0002'
+  bundle_id: 'com.office.activity.helper'
+  number: '0002'
+  app_id: 'office0002'
+  domain: 'office0002.com'
+  localization: EN
+
+# AppsFlyer API Token, optional
+appsflyer:
+  appsflyer_token: ''
+  appsflyer_dev_key: ''
+
+# Appmetrica settings, optional
+appmetrica:
+  app_id: ''
+  post_api_key: ''
+  sdk_key: ''
+
+# Keitaro Configuration
+keitaro:
+  url: 'https://trk.office0002.com'
+  link_id: 'placeholder'
+  campaign_token: 'placeholder'
+
+# Privacy Settings (auto-generated: suffix_style)
+privacy:
+  callback: 'privacy_func'
+  accepted_param: 'consent_value'
+  developer_name: ''
+  server: 'evoapps'
+
+# Notification Settings
+notifications:
+  skip_param: 'notification_flag'
+  token_param: 'fcm_key'
+
+# Encryption
+encryption:
+  aes_key: '0e4cea9c8cb9e33345b7817a5c0a5e7c'
+
+# Request Parameters
+request_params:
+  installer_param: 'installer_key'
+  user_id_param: 'user_key'
+  oaid_param: 'oaid_param'
+  google_ad_id_param: 'google_param'
+  appsflyer_id_param: 'af_ref'
+  appsflyer_source_param: 'attribution_ref'
+  appsflyer_campaign_param: 'campaign_param'
