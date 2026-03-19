@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../local/prefs_store.dart';
-import '../models/custom_workout.dart';
+import 'package:FlutterApp/data/local/prefs_store.dart';
+import 'package:FlutterApp/data/models/custom_workout.dart';
 
 class WorkoutRepository {
   WorkoutRepository({

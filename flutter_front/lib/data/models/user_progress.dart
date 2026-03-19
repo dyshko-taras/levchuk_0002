@@ -1,6 +1,5 @@
+import 'package:FlutterApp/data/models/day_progress.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'day_progress.dart';
 
 part 'user_progress.g.dart';
 
@@ -10,12 +9,12 @@ class UserProgress {
     required this.dailyProgress,
   });
 
+  factory UserProgress.empty() => const UserProgress(dailyProgress: {});
+
   factory UserProgress.fromJson(Map<String, dynamic> json) =>
       _$UserProgressFromJson(json);
 
   final Map<String, DayProgress> dailyProgress;
 
   Map<String, dynamic> toJson() => _$UserProgressToJson(this);
-
-  factory UserProgress.empty() => const UserProgress(dailyProgress: {});
 }

@@ -1,8 +1,7 @@
+import 'package:FlutterApp/constants/app_radius.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/app_radius.dart';
-import '../../../constants/app_spacing.dart';
-import '../../theme/app_colors.dart';
 
 class GradientCard extends StatelessWidget {
   const GradientCard({

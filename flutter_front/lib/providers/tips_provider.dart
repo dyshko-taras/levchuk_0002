@@ -1,8 +1,7 @@
+import 'package:FlutterApp/data/models/wellness_tip.dart';
+import 'package:FlutterApp/data/models/wellness_topic.dart';
+import 'package:FlutterApp/data/repositories/tips_repository.dart';
 import 'package:flutter/foundation.dart';
-
-import '../data/models/wellness_tip.dart';
-import '../data/models/wellness_topic.dart';
-import '../data/repositories/tips_repository.dart';
 
 class TipsProvider extends ChangeNotifier {
   TipsProvider({

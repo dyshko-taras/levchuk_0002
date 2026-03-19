@@ -6,6 +6,7 @@ abstract final class PrefKeys {
   static const breathingReminders = 'settings.breathing_reminders';
   static const soundEnabled = 'settings.sound_enabled';
   static const devicePreviewEnabled = 'settings.device_preview_enabled';
+  static const demoDataEnabled = 'settings.demo_data_enabled';
   static const userProgress = 'storage.user_progress';
   static const breathingSettings = 'storage.breathing_settings';
   static const customWorkouts = 'storage.custom_workouts';
@@ -21,7 +22,7 @@ class PrefsStore {
 
   Future<bool?> readBool(String key) async => (await _prefs).getBool(key);
 
-  Future<void> saveBool(String key, bool value) async {
+  Future<void> saveBool(String key, {required bool value}) async {
     await (await _prefs).setBool(key, value);
   }
 

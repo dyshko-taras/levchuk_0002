@@ -1,15 +1,16 @@
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/constants/app_strings.dart';
+import 'package:FlutterApp/providers/routine_provider.dart';
+import 'package:FlutterApp/providers/settings_provider.dart';
+import 'package:FlutterApp/providers/workout_provider.dart';
+import 'package:FlutterApp/services/notification_service.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_spacing.dart';
-import '../../constants/app_strings.dart';
-import '../../providers/routine_provider.dart';
-import '../../providers/settings_provider.dart';
-import '../../providers/workout_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -28,7 +29,7 @@ class SettingsPage extends StatelessWidget {
               Gaps.hSm,
               Text(
                 AppStrings.settingsTitle,
-                style: AppFonts.display(size: 26, color: AppColors.primaryBlue),
+                style: AppFonts.display(color: AppColors.primaryBlue),
               ),
               Gaps.hLg,
               _ReminderToggleRow(
@@ -56,7 +57,14 @@ class SettingsPage extends StatelessWidget {
               _ToggleRow(
                 label: AppStrings.soundLabel,
                 value: settings.soundEnabled,
-                onChanged: settings.setSoundEnabled,
+                onChanged: (value) =>
+                    settings.setSoundEnabled(value: value),
+              ),
+              Gaps.hXs,
+              _ToggleRow(
+                label: 'Demo Data',
+                value: settings.demoDataEnabled,
+                onChanged: (value) => _handleDemoDataToggle(context, value),
               ),
               if (kDebugMode) ...[
                 Gaps.hXs,
@@ -64,13 +72,18 @@ class SettingsPage extends StatelessWidget {
                   label: AppStrings.devicePreviewLabel,
                   value: settings.devicePreviewEnabled,
                   onChanged: (value) async {
-                    final store = context.read<DevicePreviewStore>();
-                    store.data = store.data.copyWith(
-                      isEnabled: value,
-                      isToolbarVisible: value,
-                      isFrameVisible: value,
+                    final store = Provider.of<DevicePreviewStore?>(
+                      context,
+                      listen: false,
                     );
-                    await settings.setDevicePreviewEnabled(value);
+                    if (store != null) {
+                      store.data = store.data.copyWith(
+                        isEnabled: value,
+                        isToolbarVisible: value,
+                        isFrameVisible: value,
+                      );
+                    }
+                    await settings.setDevicePreviewEnabled(value: value);
                   },
                 ),
               ],
@@ -82,25 +95,44 @@ class SettingsPage extends StatelessWidget {
                   weight: FontWeight.w700,
                   color: Colors.white,
                 ),
+                textAlign: TextAlign.center,
               ),
               Gaps.hSm,
               Text(
                 'Version: 1.0.0',
                 style: AppFonts.body(color: AppColors.textGray),
+                textAlign: TextAlign.center,
               ),
               Gaps.hXs,
               Text(
                 'Build: 2026.03.19',
                 style: AppFonts.body(color: AppColors.textGray),
+                textAlign: TextAlign.center,
               ),
               Gaps.hXs,
               Text(
                 'Brand Integration: ActiveOffice',
                 style: AppFonts.body(color: AppColors.textGray),
+                textAlign: TextAlign.center,
               ),
               Gaps.hXl,
+              FilledButton(
+                onPressed: () => _sendTestNotification(context),
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(52),
+                  backgroundColor: AppColors.primaryBlue,
+                ),
+                child: Text(
+                  'Send Test Notification',
+                  style: AppFonts.body(
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Gaps.hSm,
               OutlinedButton(
-                onPressed: () {},
+                onPressed: _shareApp,
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                   side: const BorderSide(
@@ -118,7 +150,7 @@ class SettingsPage extends StatelessWidget {
               ),
               Gaps.hXs,
               OutlinedButton(
-                onPressed: () {},
+                onPressed: null,
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                   side: const BorderSide(
@@ -166,9 +198,9 @@ class SettingsPage extends StatelessWidget {
 
     if (!value) {
       if (type == ReminderToggleType.hourly) {
-        await settings.setHourlyReminders(false);
+        await settings.setHourlyReminders(value: false);
       } else {
-        await settings.setBreathingReminders(false);
+        await settings.setBreathingReminders(value: false);
       }
       return;
     }
@@ -182,7 +214,8 @@ class SettingsPage extends StatelessWidget {
           style: AppFonts.display(size: 20, color: Colors.white),
         ),
         content: Text(
-          'ActiveOffice needs notification permission to send you stretch and breathing reminders during your workday.',
+          'ActiveOffice needs notification permission to send you stretch '
+          'and breathing reminders during your workday.',
           style: AppFonts.body(color: AppColors.textGray),
         ),
         actions: [
@@ -227,7 +260,8 @@ class SettingsPage extends StatelessWidget {
             style: AppFonts.display(size: 20, color: Colors.white),
           ),
           content: Text(
-            'Notifications are disabled. Enable them in system settings to receive reminders.',
+            'Notifications are disabled. Enable them in system settings to '
+            'receive reminders.',
             style: AppFonts.body(color: AppColors.textGray),
           ),
           actions: [
@@ -259,6 +293,8 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> _confirmResetProgress(BuildContext context) async {
+    final routineProvider = context.read<RoutineProvider>();
+    final workoutProvider = context.read<WorkoutProvider>();
     final controller = TextEditingController();
     var errorText = '';
 
@@ -310,7 +346,9 @@ class SettingsPage extends StatelessWidget {
                     }
                     Navigator.of(context).pop(true);
                   },
-                  style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.red,
+                  ),
                   child: Text(
                     'Reset',
                     style: AppFonts.body(
@@ -330,8 +368,170 @@ class SettingsPage extends StatelessWidget {
       return;
     }
 
-    await context.read<RoutineProvider>().clearAllProgress();
-    await context.read<WorkoutProvider>().clearAll();
+    await routineProvider.clearAllProgress();
+    await workoutProvider.clearAll();
+  }
+
+  Future<void> _handleDemoDataToggle(BuildContext context, bool value) async {
+    final settings = context.read<SettingsProvider>();
+    final routineProvider = context.read<RoutineProvider>();
+    final workoutProvider = context.read<WorkoutProvider>();
+
+    if (value) {
+      await settings.setDemoDataEnabled(value: true);
+      await routineProvider.applyDemoData();
+      await workoutProvider.applyDemoData();
+      return;
+    }
+
+    await settings.setDemoDataEnabled(value: false);
+    await routineProvider.clearAllProgress();
+    await workoutProvider.clearAll();
+  }
+
+  Future<void> _sendTestNotification(BuildContext context) async {
+    final notificationService = context.read<NotificationService>();
+    final settings = context.read<SettingsProvider>();
+    final permissionGranted = await notificationService
+        .areNotificationsEnabledSystem();
+
+    if (!context.mounted) {
+      return;
+    }
+
+    if (!permissionGranted) {
+      final allow = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          backgroundColor: AppColors.darkCard,
+          title: Text(
+            'Allow test notification?',
+            style: AppFonts.display(size: 20, color: Colors.white),
+          ),
+          content: Text(
+            'ActiveOffice needs notification permission to send a system test '
+            'notification.',
+            style: AppFonts.body(color: AppColors.textGray),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(
+                'Cancel',
+                style: AppFonts.body(color: AppColors.textGray3),
+              ),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(
+                'Allow',
+                style: AppFonts.body(
+                  weight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+      if (allow != true || !context.mounted) {
+        return;
+      }
+
+      final requested = await notificationService
+          .requestNotificationPermission();
+
+      if (!context.mounted) {
+        return;
+      }
+
+      if (!requested) {
+        await showDialog<void>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            backgroundColor: AppColors.darkCard,
+            title: Text(
+              'Notifications blocked',
+              style: AppFonts.display(size: 20, color: Colors.white),
+            ),
+            content: Text(
+              'Notification permission is required to show the system test '
+              'notification.',
+              style: AppFonts.body(color: AppColors.textGray),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(
+                  'Close',
+                  style: AppFonts.body(color: AppColors.textGray3),
+                ),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      await settings.refreshNotificationPermissionState(syncSchedules: true);
+    } else {
+      await settings.refreshNotificationPermissionState(syncSchedules: true);
+    }
+
+    await notificationService.showTestNotification();
+  }
+
+  Future<void> _shareApp() {
+    return SharePlus.instance.share(
+      ShareParams(
+        text:
+            'Try ActiveOffice for hourly stretches, breathing breaks, and '
+            'desk workouts.',
+        subject: 'ActiveOffice',
+      ),
+    );
+  }
+}
+
+class _ToggleRow extends StatelessWidget {
+  const _ToggleRow({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(label, style: AppFonts.body(color: Colors.white)),
+          ),
+          Switch.adaptive(
+            value: value,
+            activeThumbColor: AppColors.greenStart,
+            activeTrackColor: Colors.white,
+            inactiveTrackColor: Colors.white,
+            inactiveThumbColor: Colors.grey,
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -366,55 +566,12 @@ class _ReminderToggleRow extends StatelessWidget {
               right: AppSpacing.md,
             ),
             child: Text(
-              'Notifications are disabled. Enable them in system settings to receive reminders.',
-              style: AppFonts.body(
-                size: 12,
-                color: AppColors.redLight,
-              ),
+              'Notifications are disabled. Enable them in system settings to '
+              'receive reminders.',
+              style: AppFonts.body(size: 12, color: AppColors.redLight),
             ),
           ),
       ],
-    );
-  }
-}
-
-class _ToggleRow extends StatelessWidget {
-  const _ToggleRow({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.darkCard,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(label, style: AppFonts.body(color: Colors.white)),
-          ),
-          Switch.adaptive(
-            value: value,
-            activeTrackColor: Colors.white,
-            activeColor: AppColors.greenStart,
-            inactiveTrackColor: Colors.white,
-            inactiveThumbColor: Colors.grey,
-            onChanged: onChanged,
-          ),
-        ],
-      ),
     );
   }
 }

@@ -1,21 +1,86 @@
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/data/models/breathing_settings.dart';
+import 'package:FlutterApp/enums/enums.dart';
+import 'package:FlutterApp/providers/breathing_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/app_spacing.dart';
-import '../../enums/enums.dart';
-import '../../providers/breathing_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
-import '../widgets/common/screen_header.dart';
-
-class BreathingSettingsPage extends StatelessWidget {
+class BreathingSettingsPage extends StatefulWidget {
   const BreathingSettingsPage({super.key});
 
   @override
+  State<BreathingSettingsPage> createState() => _BreathingSettingsPageState();
+}
+
+class _BreathingSettingsPageState extends State<BreathingSettingsPage> {
+  static const _durations = [1, 3, 5, 10];
+
+  bool _initialized = false;
+  late int _durationMinutes;
+  late BreathingMode _mode;
+  late bool _soundEnabled;
+
+  bool get _hasChanges {
+    final settings = context.read<BreathingProvider>().settings;
+    return _durationMinutes != settings.durationMinutes ||
+        _mode != settings.mode ||
+        _soundEnabled != settings.soundEnabled;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_initialized) {
+      return;
+    }
+
+    final settings = context.read<BreathingProvider>().settings;
+    _durationMinutes = settings.durationMinutes;
+    _mode = settings.mode;
+    _soundEnabled = settings.soundEnabled;
+    _initialized = true;
+  }
+
+  Future<void> _applyChanges() async {
+    final provider = context.read<BreathingProvider>();
+    final hasActiveSession =
+        provider.sessionRunning ||
+        provider.remainingSeconds > 0 ||
+        provider.sessionCompleted;
+
+    await provider.update(
+      BreathingSettings(
+        durationMinutes: _durationMinutes,
+        mode: _mode,
+        soundEnabled: _soundEnabled,
+      ),
+    );
+
+    if (hasActiveSession) {
+      provider.stopSession();
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          hasActiveSession
+              ? 'Breathing session stopped. New settings applied.'
+              : 'Breathing settings applied.',
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final breathingProvider = context.watch<BreathingProvider>();
-    final settings = breathingProvider.settings;
-    const durations = [1, 3, 5, 10];
+    context.watch<BreathingProvider>();
 
     return Scaffold(
       body: SafeArea(
@@ -35,7 +100,7 @@ class BreathingSettingsPage extends StatelessWidget {
                   ),
                   Gaps.hSm,
                   Row(
-                    children: durations
+                    children: _durations
                         .map(
                           (duration) => Expanded(
                             child: Padding(
@@ -44,9 +109,12 @@ class BreathingSettingsPage extends StatelessWidget {
                               ),
                               child: _SelectChip(
                                 label: '$duration',
-                                selected: settings.durationMinutes == duration,
-                                onTap: () =>
-                                    breathingProvider.updateDuration(duration),
+                                selected: _durationMinutes == duration,
+                                onTap: () {
+                                  setState(() {
+                                    _durationMinutes = duration;
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -69,8 +137,12 @@ class BreathingSettingsPage extends StatelessWidget {
                               ),
                               child: _SelectChip(
                                 label: _modeLabel(mode),
-                                selected: settings.mode == mode,
-                                onTap: () => breathingProvider.updateMode(mode),
+                                selected: _mode == mode,
+                                onTap: () {
+                                  setState(() {
+                                    _mode = mode;
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -96,12 +168,41 @@ class BreathingSettingsPage extends StatelessWidget {
                           ),
                         ),
                         Switch(
-                          value: settings.soundEnabled,
-                          activeColor: AppColors.greenStart,
-                          onChanged: breathingProvider.updateSound,
+                          value: _soundEnabled,
+                          activeThumbColor: AppColors.greenStart,
+                          onChanged: (value) {
+                            setState(() {
+                              _soundEnabled = value;
+                            });
+                          },
                         ),
                       ],
                     ),
+                  ),
+                  Gaps.hXl,
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.greenStart,
+                      minimumSize: const Size.fromHeight(54),
+                    ),
+                    onPressed: _hasChanges ? _applyChanges : null,
+                    child: Text(
+                      'Apply Changes',
+                      style: AppFonts.body(
+                        weight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Gaps.hSm,
+                  Text(
+                    'Applying new settings will stop the current breathing '
+                    'session if one is active.',
+                    style: AppFonts.body(
+                      size: 12,
+                      color: AppColors.textGray,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
@@ -139,7 +240,9 @@ class _SelectChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return FilledButton(
       style: FilledButton.styleFrom(
-        backgroundColor: selected ? AppColors.greenStart : AppColors.darkCard,
+        backgroundColor: selected
+            ? AppColors.greenStart
+            : AppColors.darkCard,
         minimumSize: const Size.fromHeight(52),
       ),
       onPressed: onTap,

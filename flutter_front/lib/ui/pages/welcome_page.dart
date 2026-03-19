@@ -1,14 +1,13 @@
+import 'package:FlutterApp/constants/app_images.dart';
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/constants/app_strings.dart';
+import 'package:FlutterApp/providers/app_bootstrap_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_images.dart';
-import '../../constants/app_routes.dart';
-import '../../constants/app_spacing.dart';
-import '../../constants/app_strings.dart';
-import '../../providers/app_bootstrap_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -60,7 +59,9 @@ class WelcomePage extends StatelessWidget {
                   const Spacer(),
                   FilledButton(
                     onPressed: () async {
-                      await context.read<AppBootstrapProvider>().completeOnboarding();
+                      await context
+                          .read<AppBootstrapProvider>()
+                          .completeOnboarding();
                       if (context.mounted) {
                         context.go(AppRoutes.home);
                       }

@@ -1,6 +1,5 @@
+import 'package:FlutterApp/enums/enums.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import '../../enums/enums.dart';
 
 part 'breathing_settings.g.dart';
 
@@ -12,6 +11,12 @@ class BreathingSettings {
     required this.soundEnabled,
   });
 
+  factory BreathingSettings.defaults() => const BreathingSettings(
+    durationMinutes: 3,
+    mode: BreathingMode.calm,
+    soundEnabled: true,
+  );
+
   factory BreathingSettings.fromJson(Map<String, dynamic> json) =>
       _$BreathingSettingsFromJson(json);
 
@@ -20,10 +25,4 @@ class BreathingSettings {
   final bool soundEnabled;
 
   Map<String, dynamic> toJson() => _$BreathingSettingsToJson(this);
-
-  factory BreathingSettings.defaults() => const BreathingSettings(
-        durationMinutes: 3,
-        mode: BreathingMode.calm,
-        soundEnabled: true,
-      );
 }

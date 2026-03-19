@@ -1,5 +1,5 @@
-import '../local/asset_loader.dart';
-import '../models/wellness_topic.dart';
+import 'package:FlutterApp/data/local/asset_loader.dart';
+import 'package:FlutterApp/data/models/wellness_topic.dart';
 
 class TipsRepository {
   TipsRepository({

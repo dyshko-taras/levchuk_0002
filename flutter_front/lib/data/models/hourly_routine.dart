@@ -1,6 +1,5 @@
+import 'package:FlutterApp/data/models/exercise.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'exercise.dart';
 
 part 'hourly_routine.g.dart';
 

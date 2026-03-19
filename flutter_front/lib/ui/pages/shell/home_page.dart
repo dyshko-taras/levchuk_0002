@@ -1,18 +1,17 @@
+import 'package:FlutterApp/constants/app_images.dart';
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/constants/app_strings.dart';
+import 'package:FlutterApp/providers/quotes_provider.dart';
+import 'package:FlutterApp/providers/routine_provider.dart';
+import 'package:FlutterApp/providers/tips_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/accent_bar.dart';
+import 'package:FlutterApp/ui/widgets/common/gradient_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../../constants/app_images.dart';
-import '../../../constants/app_routes.dart';
-import '../../../constants/app_spacing.dart';
-import '../../../constants/app_strings.dart';
-import '../../../providers/quotes_provider.dart';
-import '../../../providers/routine_provider.dart';
-import '../../../providers/tips_provider.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_fonts.dart';
-import '../../widgets/common/accent_bar.dart';
-import '../../widgets/common/gradient_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -24,8 +23,9 @@ class HomePage extends StatelessWidget {
     final tipsProvider = context.watch<TipsProvider>();
     final quote = quotesProvider.quoteOfTheDay;
     final tip = tipsProvider.tipOfTheDay();
-    final featuredTopicId =
-        tipsProvider.topics.isEmpty ? null : tipsProvider.topics.first.id;
+    final featuredTopicId = tipsProvider.topics.isEmpty
+        ? null
+        : tipsProvider.topics.first.id;
 
     return Scaffold(
       body: SafeArea(
@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Gaps.hSm,
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.asset(
@@ -50,7 +51,6 @@ class HomePage extends StatelessWidget {
                     child: Text(
                       AppStrings.homeTitle,
                       style: AppFonts.display(
-                        size: 26,
                         color: AppColors.primaryBlue,
                       ),
                     ),
@@ -72,9 +72,7 @@ class HomePage extends StatelessWidget {
                 completedHours: routineProvider.completedHoursCount,
                 breathingMinutes: routineProvider.breathingMinutes,
                 streakDays: routineProvider.streakDays,
-                onResetTap: () {
-                  routineProvider.resetToday();
-                },
+                onResetTap: routineProvider.resetToday,
               ),
               Gaps.hXl,
               Text(
@@ -87,7 +85,9 @@ class HomePage extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: AppSpacing.xs),
                   child: InkWell(
-                    onTap: () => context.push(AppRoutes.exerciseForHour(hour)),
+                    onTap: () => context.push(
+                      AppRoutes.exerciseForHour(hour),
+                    ),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.md,
@@ -106,7 +106,8 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${item.exercise.name} ${routineProvider.statusEmojiForHour(hour)}  ►',
+                            '${item.exercise.name} '
+                            '${routineProvider.statusEmojiForHour(hour)}  ►',
                             style: AppFonts.body(color: Colors.white),
                           ),
                         ],
@@ -121,36 +122,41 @@ class HomePage extends StatelessWidget {
                 style: AppFonts.display(size: 18, color: Colors.white),
               ),
               Gaps.hSm,
-              Row(
-                children: [
-                  Expanded(
-                    child: _ActionCard(
-                      emoji: '🏃',
-                      label: 'Quick Stretch',
-                      onTap: () => context.push(AppRoutes.exerciseForHour(1)),
-                    ),
-                  ),
-                  Gaps.wSm,
-                  Expanded(
-                    child: _ActionCard(
-                      emoji: '🌬️',
-                      label: 'Open Breathe',
-                      onTap: () => context.go(AppRoutes.breathe),
-                    ),
-                  ),
-                  Gaps.wSm,
-                  Expanded(
-                    child: _ActionCard(
-                      emoji: '💡',
-                      label: 'Tips of the Day',
-                      onTap: () => context.go(
-                        tip == null || featuredTopicId == null
-                            ? AppRoutes.tips
-                            : AppRoutes.tipDetail(featuredTopicId),
+              SizedBox(
+                height: 120,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _ActionCard(
+                        emoji: '🏃',
+                        label: 'Quick Stretch',
+                        onTap: () => context.push(
+                          AppRoutes.exerciseForHour(1),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Gaps.wSm,
+                    Expanded(
+                      child: _ActionCard(
+                        emoji: '🌬️',
+                        label: 'Open Breathe',
+                        onTap: () => context.go(AppRoutes.breathe),
+                      ),
+                    ),
+                    Gaps.wSm,
+                    Expanded(
+                      child: _ActionCard(
+                        emoji: '💡',
+                        label: 'Tips of the Day',
+                        onTap: () => context.go(
+                          tip == null || featuredTopicId == null
+                              ? AppRoutes.tips
+                              : AppRoutes.tipDetail(featuredTopicId),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Gaps.hLg,
               GradientCard(
@@ -168,7 +174,9 @@ class HomePage extends StatelessWidget {
                     ),
                     Gaps.hXs,
                     Text(
-                      quote == null ? '"No quote available yet."' : '"${quote.text}"',
+                      quote == null
+                          ? '"No quote available yet."'
+                          : '"${quote.text}"',
                       style: AppFonts.body(color: Colors.white),
                     ),
                     Gaps.hXs,
@@ -243,7 +251,10 @@ class _ProgressCard extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                 '🔄 Reset Day',
-                style: AppFonts.body(size: 13, color: AppColors.primaryBlue),
+                style: AppFonts.body(
+                  size: 13,
+                  color: AppColors.primaryBlue,
+                ),
               ),
             ),
           ),
@@ -275,7 +286,9 @@ class _ProgressRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(child: Text(label, style: AppFonts.body(color: Colors.white))),
+          Expanded(
+            child: Text(label, style: AppFonts.body(color: Colors.white)),
+          ),
           Text(
             value,
             style: AppFonts.body(
@@ -306,7 +319,6 @@ class _ActionCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Ink(
-        height: 104,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           gradient: const LinearGradient(
@@ -322,11 +334,18 @@ class _ActionCard extends StatelessWidget {
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(emoji, style: const TextStyle(fontSize: 28)),
+              Text(
+                emoji,
+                style: const TextStyle(fontSize: 28),
+                textAlign: TextAlign.center,
+              ),
               Gaps.hXs,
               Text(
                 label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: AppFonts.body(
                   weight: FontWeight.w600,

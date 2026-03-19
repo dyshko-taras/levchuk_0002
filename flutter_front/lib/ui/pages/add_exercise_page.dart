@@ -1,13 +1,12 @@
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/providers/workout_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_routes.dart';
-import '../../constants/app_spacing.dart';
-import '../../providers/workout_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
-import '../widgets/common/screen_header.dart';
 
 class AddExercisePage extends StatefulWidget {
   const AddExercisePage({super.key});
@@ -45,6 +44,54 @@ class _AddExercisePageState extends State<AddExercisePage> {
     }
 
     return Scaffold(
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.screenPadding,
+            AppSpacing.sm,
+            AppSpacing.screenPadding,
+            AppSpacing.lg,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.greenStart,
+                  minimumSize: const Size.fromHeight(54),
+                ),
+                onPressed: () {
+                  workoutProvider.commitSelectedExercises();
+                  context.pop();
+                },
+                child: Text(
+                  'Add Selected',
+                  style: AppFonts.body(
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Gaps.hSm,
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(54),
+                  side: const BorderSide(color: AppColors.greenStart),
+                ),
+                onPressed: () => context.push(AppRoutes.customStep),
+                child: Text(
+                  '+ Custom Step',
+                  style: AppFonts.body(
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -75,8 +122,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     Gaps.hMd,
                     Expanded(
                       child: ListView.separated(
+                        padding: const EdgeInsets.only(bottom: AppSpacing.md),
                         itemCount: workoutProvider.filteredExercises.length,
-                        separatorBuilder: (_, __) => Gaps.hXs,
+                        separatorBuilder: (_, _) => Gaps.hXs,
                         itemBuilder: (context, index) {
                           final exercise =
                               workoutProvider.filteredExercises[index];
@@ -141,39 +189,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
                             ),
                           );
                         },
-                      ),
-                    ),
-                    Gaps.hMd,
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.greenStart,
-                        minimumSize: const Size.fromHeight(54),
-                      ),
-                      onPressed: () {
-                        workoutProvider.commitSelectedExercises();
-                        context.pop();
-                      },
-                      child: Text(
-                        'Add Selected',
-                        style: AppFonts.body(
-                          weight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Gaps.hSm,
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(54),
-                        side: const BorderSide(color: AppColors.greenStart),
-                      ),
-                      onPressed: () => context.push(AppRoutes.customStep),
-                      child: Text(
-                        '+ Custom Step',
-                        style: AppFonts.body(
-                          weight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
                       ),
                     ),
                   ],

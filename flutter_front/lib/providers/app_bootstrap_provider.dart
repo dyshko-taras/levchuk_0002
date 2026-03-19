@@ -1,6 +1,5 @@
+import 'package:FlutterApp/data/local/prefs_store.dart';
 import 'package:flutter/foundation.dart';
-
-import '../data/local/prefs_store.dart';
 
 enum AppBootstrapStatus {
   idle,
@@ -36,6 +35,6 @@ class AppBootstrapProvider extends ChangeNotifier {
   Future<void> completeOnboarding() async {
     _isFirstLaunch = false;
     notifyListeners();
-    await PrefsStore.instance.saveBool(PrefKeys.firstLaunch, false);
+    await PrefsStore.instance.saveBool(PrefKeys.firstLaunch, value: false);
   }
 }

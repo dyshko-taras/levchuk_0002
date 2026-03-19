@@ -1,11 +1,10 @@
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/accent_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../constants/app_routes.dart';
-import '../../../constants/app_spacing.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_fonts.dart';
-import 'accent_bar.dart';
 
 class ScreenHeader extends StatelessWidget {
   const ScreenHeader({
@@ -51,7 +50,6 @@ class ScreenHeader extends StatelessWidget {
                 child: Text(
                   title,
                   style: AppFonts.display(
-                    size: 26,
                     color: AppColors.primaryBlue,
                   ),
                 ),
@@ -77,9 +75,10 @@ class ScreenHeader extends StatelessWidget {
               ),
             ),
           Gaps.hSm,
-          accentColor == ScreenHeaderAccent.purple
-              ? AccentBar.purple
-              : AccentBar.blue,
+          if (accentColor == ScreenHeaderAccent.purple)
+            AccentBar.purple
+          else
+            AccentBar.blue,
         ],
       ),
     );

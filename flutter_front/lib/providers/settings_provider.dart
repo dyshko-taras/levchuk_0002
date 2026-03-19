@@ -1,8 +1,7 @@
+import 'package:FlutterApp/data/local/prefs_store.dart';
+import 'package:FlutterApp/services/notification_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../data/local/prefs_store.dart';
-import '../services/notification_service.dart';
 
 class SettingsProvider extends ChangeNotifier {
   SettingsProvider({
@@ -16,6 +15,7 @@ class SettingsProvider extends ChangeNotifier {
   bool _breathingReminders = true;
   bool _soundEnabled = false;
   bool _devicePreviewEnabled = false;
+  bool _demoDataEnabled = false;
   PermissionStatus _notificationPermissionStatus = PermissionStatus.denied;
   bool _showHourlyWarning = false;
   bool _showBreathingWarning = false;
@@ -25,6 +25,7 @@ class SettingsProvider extends ChangeNotifier {
   bool get breathingReminders => _breathingReminders;
   bool get soundEnabled => _soundEnabled;
   bool get devicePreviewEnabled => _devicePreviewEnabled;
+  bool get demoDataEnabled => _demoDataEnabled;
   bool get showHourlyWarning => _showHourlyWarning;
   bool get showBreathingWarning => _showBreathingWarning;
   bool get notificationsGranted => _notificationPermissionStatus.isGranted;
@@ -45,13 +46,15 @@ class SettingsProvider extends ChangeNotifier {
     _devicePreviewEnabled =
         await PrefsStore.instance.readBool(PrefKeys.devicePreviewEnabled) ??
         false;
+    _demoDataEnabled =
+        await PrefsStore.instance.readBool(PrefKeys.demoDataEnabled) ?? false;
 
     _loaded = true;
     await refreshNotificationPermissionState(syncSchedules: true);
     notifyListeners();
   }
 
-  Future<void> setHourlyReminders(bool value) async {
+  Future<void> setHourlyReminders({required bool value}) async {
     if (_hourlyReminders == value) {
       return;
     }
@@ -60,11 +63,14 @@ class SettingsProvider extends ChangeNotifier {
       _showHourlyWarning = false;
     }
     notifyListeners();
-    await PrefsStore.instance.saveBool(PrefKeys.hourlyReminders, value);
+    await PrefsStore.instance.saveBool(
+      PrefKeys.hourlyReminders,
+      value: value,
+    );
     await _syncSchedules();
   }
 
-  Future<void> setBreathingReminders(bool value) async {
+  Future<void> setBreathingReminders({required bool value}) async {
     if (_breathingReminders == value) {
       return;
     }
@@ -73,42 +79,72 @@ class SettingsProvider extends ChangeNotifier {
       _showBreathingWarning = false;
     }
     notifyListeners();
-    await PrefsStore.instance.saveBool(PrefKeys.breathingReminders, value);
+    await PrefsStore.instance.saveBool(
+      PrefKeys.breathingReminders,
+      value: value,
+    );
     await _syncSchedules();
   }
 
-  Future<void> setSoundEnabled(bool value) async {
+  Future<void> setSoundEnabled({required bool value}) async {
     if (_soundEnabled == value) {
       return;
     }
     _soundEnabled = value;
     notifyListeners();
-    await PrefsStore.instance.saveBool(PrefKeys.soundEnabled, value);
+    await PrefsStore.instance.saveBool(
+      PrefKeys.soundEnabled,
+      value: value,
+    );
+    await _syncSchedules();
   }
 
-  Future<void> setDevicePreviewEnabled(bool value) async {
+  Future<void> setDevicePreviewEnabled({required bool value}) async {
     if (_devicePreviewEnabled == value) {
       return;
     }
     _devicePreviewEnabled = value;
     notifyListeners();
-    await PrefsStore.instance.saveBool(PrefKeys.devicePreviewEnabled, value);
+    await PrefsStore.instance.saveBool(
+      PrefKeys.devicePreviewEnabled,
+      value: value,
+    );
+  }
+
+  Future<void> setDemoDataEnabled({required bool value}) async {
+    if (_demoDataEnabled == value) {
+      return;
+    }
+    _demoDataEnabled = value;
+    notifyListeners();
+    await PrefsStore.instance.saveBool(
+      PrefKeys.demoDataEnabled,
+      value: value,
+    );
   }
 
   Future<void> refreshNotificationPermissionState({
     bool syncSchedules = false,
   }) async {
-    _notificationPermissionStatus = await _notificationService
-        .notificationPermissionStatus();
+    final enabled = await _notificationService.areNotificationsEnabledSystem();
+    _notificationPermissionStatus = enabled
+        ? PermissionStatus.granted
+        : await _notificationService.notificationPermissionStatus();
 
     if (!_notificationPermissionStatus.isGranted) {
       if (_hourlyReminders) {
         _hourlyReminders = false;
-        await PrefsStore.instance.saveBool(PrefKeys.hourlyReminders, false);
+        await PrefsStore.instance.saveBool(
+          PrefKeys.hourlyReminders,
+          value: false,
+        );
       }
       if (_breathingReminders) {
         _breathingReminders = false;
-        await PrefsStore.instance.saveBool(PrefKeys.breathingReminders, false);
+        await PrefsStore.instance.saveBool(
+          PrefKeys.breathingReminders,
+          value: false,
+        );
       }
     }
 
@@ -122,16 +158,18 @@ class SettingsProvider extends ChangeNotifier {
   Future<ReminderPermissionFlowResult> enableReminderAfterPermissionFlow(
     ReminderToggleType type,
   ) async {
-    _notificationPermissionStatus = await _notificationService
-        .requestNotificationPermission();
+    final granted = await _notificationService.requestNotificationPermission();
+    _notificationPermissionStatus = granted
+        ? PermissionStatus.granted
+        : await _notificationService.notificationPermissionStatus();
 
     if (_notificationPermissionStatus.isGranted) {
       if (type == ReminderToggleType.hourly) {
         _showHourlyWarning = false;
-        await setHourlyReminders(true);
+        await setHourlyReminders(value: true);
       } else {
         _showBreathingWarning = false;
-        await setBreathingReminders(true);
+        await setBreathingReminders(value: true);
       }
       return ReminderPermissionFlowResult.enabled;
     }
@@ -160,13 +198,14 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   Future<bool> openNotificationSettings() {
-    return _notificationService.openSystemSettings();
+    return _notificationService.openAppSettings().then((_) => true);
   }
 
   Future<void> _syncSchedules() {
     return _notificationService.syncReminderSchedules(
       hourlyEnabled: _hourlyReminders && notificationsGranted,
       breathingEnabled: _breathingReminders && notificationsGranted,
+      soundEnabled: _soundEnabled,
     );
   }
 }

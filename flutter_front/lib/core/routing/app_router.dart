@@ -1,22 +1,21 @@
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/ui/pages/add_exercise_page.dart';
+import 'package:FlutterApp/ui/pages/breathing_settings_page.dart';
+import 'package:FlutterApp/ui/pages/custom_step_page.dart';
+import 'package:FlutterApp/ui/pages/exercise_page.dart';
+import 'package:FlutterApp/ui/pages/shell/breathing_page.dart';
+import 'package:FlutterApp/ui/pages/shell/home_page.dart';
+import 'package:FlutterApp/ui/pages/shell/main_shell_page.dart';
+import 'package:FlutterApp/ui/pages/shell/quotes_page.dart';
+import 'package:FlutterApp/ui/pages/shell/settings_page.dart';
+import 'package:FlutterApp/ui/pages/shell/tips_page.dart';
+import 'package:FlutterApp/ui/pages/shell/workout_page.dart';
+import 'package:FlutterApp/ui/pages/splash_page.dart';
+import 'package:FlutterApp/ui/pages/tip_detail_page.dart';
+import 'package:FlutterApp/ui/pages/welcome_page.dart';
+import 'package:FlutterApp/ui/pages/workout_session_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../constants/app_routes.dart';
-import '../../ui/pages/add_exercise_page.dart';
-import '../../ui/pages/breathing_page.dart';
-import '../../ui/pages/breathing_settings_page.dart';
-import '../../ui/pages/custom_step_page.dart';
-import '../../ui/pages/exercise_page.dart';
-import '../../ui/pages/quotes_page.dart';
-import '../../ui/pages/settings_page.dart';
-import '../../ui/pages/tip_detail_page.dart';
-import '../../ui/pages/tips_page.dart';
-import '../../ui/pages/workout_page.dart';
-import '../../ui/pages/workout_session_page.dart';
-import '../../ui/pages/shell/home_page.dart';
-import '../../ui/pages/shell/main_shell_page.dart';
-import '../../ui/pages/splash_page.dart';
-import '../../ui/pages/welcome_page.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -28,11 +27,11 @@ class AppRouter {
     routes: [
       GoRoute(
         path: AppRoutes.splash,
-        builder: (_, __) => const SplashPage(),
+        builder: (_, _) => const SplashPage(),
       ),
       GoRoute(
         path: AppRoutes.welcome,
-        builder: (_, __) => const WelcomePage(),
+        builder: (_, _) => const WelcomePage(),
       ),
       StatefulShellRoute.indexedStack(
         parentNavigatorKey: _rootNavigatorKey,
@@ -44,7 +43,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.home,
-                builder: (_, __) => const HomePage(),
+                builder: (_, _) => const HomePage(),
               ),
             ],
           ),
@@ -52,7 +51,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.tips,
-                builder: (_, __) => const TipsPage(),
+                builder: (_, _) => const TipsPage(),
               ),
             ],
           ),
@@ -60,7 +59,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.breathe,
-                builder: (_, __) => const BreathingPage(),
+                builder: (_, _) => const BreathingPage(),
               ),
             ],
           ),
@@ -68,7 +67,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.quotes,
-                builder: (_, __) => const QuotesPage(),
+                builder: (_, _) => const QuotesPage(),
               ),
             ],
           ),
@@ -76,7 +75,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.workout,
-                builder: (_, __) => const WorkoutPage(),
+                builder: (_, _) => const WorkoutPage(),
               ),
             ],
           ),
@@ -84,7 +83,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.settings,
-                builder: (_, __) => const SettingsPage(),
+                builder: (_, _) => const SettingsPage(),
               ),
             ],
           ),
@@ -98,11 +97,11 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.addExercise,
-        builder: (_, __) => const AddExercisePage(),
+        builder: (_, _) => const AddExercisePage(),
       ),
       GoRoute(
         path: AppRoutes.customStep,
-        builder: (_, __) => const CustomStepPage(),
+        builder: (_, _) => const CustomStepPage(),
       ),
       GoRoute(
         path: '${AppRoutes.tips}/:topicId',
@@ -111,11 +110,11 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.breathingSettings,
-        builder: (_, __) => const BreathingSettingsPage(),
+        builder: (_, _) => const BreathingSettingsPage(),
       ),
       GoRoute(
         path: AppRoutes.workoutSession,
-        builder: (_, __) => const WorkoutSessionPage(),
+        builder: (_, _) => const WorkoutSessionPage(),
       ),
     ],
   );

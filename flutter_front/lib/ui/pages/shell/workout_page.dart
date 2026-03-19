@@ -1,15 +1,16 @@
+import 'dart:async';
+
+import 'package:FlutterApp/constants/app_images.dart';
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/providers/workout_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/gradient_card.dart';
+import 'package:FlutterApp/ui/widgets/common/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_images.dart';
-import '../../constants/app_routes.dart';
-import '../../constants/app_spacing.dart';
-import '../../providers/workout_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
-import '../widgets/common/gradient_card.dart';
-import '../widgets/common/screen_header.dart';
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({super.key});
@@ -40,6 +41,7 @@ class WorkoutPage extends StatelessWidget {
                 ),
               ),
             ),
+            Gaps.hSm,
             Padding(
               padding: Insets.screen,
               child: Column(
@@ -60,7 +62,8 @@ class WorkoutPage extends StatelessWidget {
                         Gaps.hSm,
                         if (!workoutProvider.hasDraft)
                           Text(
-                            'No steps yet. Add exercises or create a custom step.',
+                            'No steps yet. Add exercises or create a custom '
+                            'step.',
                             style: AppFonts.body(color: AppColors.textGray),
                           ),
                         ...List.generate(
@@ -159,7 +162,7 @@ class WorkoutPage extends StatelessWidget {
                     onPressed: workoutProvider.hasDraft
                         ? () {
                             workoutProvider.startDraftSession();
-                            context.push(AppRoutes.workoutSession);
+                            unawaited(context.push(AppRoutes.workoutSession));
                           }
                         : null,
                     child: Text(
@@ -170,6 +173,7 @@ class WorkoutPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Gaps.hSm,
                 ],
               ),
             ),
@@ -262,7 +266,7 @@ class _DraftStepTile extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            '${(index + 1).toString().padLeft(2, '0')}',
+            (index + 1).toString().padLeft(2, '0'),
             style: AppFonts.body(
               weight: FontWeight.w700,
               color: AppColors.greenStart,

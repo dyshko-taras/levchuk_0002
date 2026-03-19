@@ -1,16 +1,15 @@
 import 'dart:async';
 
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/providers/routine_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/accent_bar.dart';
+import 'package:FlutterApp/ui/widgets/common/gradient_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_routes.dart';
-import '../../constants/app_spacing.dart';
-import '../../providers/routine_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
-import '../widgets/common/accent_bar.dart';
-import '../widgets/common/gradient_card.dart';
 
 class ExercisePage extends StatefulWidget {
   const ExercisePage({
@@ -104,7 +103,8 @@ class _ExercisePageState extends State<ExercisePage> {
       builder: (dialogContext) => AlertDialog(
         title: const Text('🎉 Session Complete'),
         content: const Text(
-          "You've completed your hourly exercise! Time for a short water break.",
+          "You've completed your hourly exercise! Time for a short water "
+          'break.',
         ),
         actions: [
           TextButton(
@@ -123,6 +123,65 @@ class _ExercisePageState extends State<ExercisePage> {
               _toggleTimer();
             },
             child: const Text('Repeat'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showExerciseInfoDialog() {
+    final routine = context.read<RoutineProvider>().routineForHour(
+      _currentHour,
+    );
+    return showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.darkCard,
+        title: Text(
+          '${routine.exercise.emoji} ${routine.exercise.name}',
+          style: AppFonts.display(size: 20, color: Colors.white),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Motivation',
+              style: AppFonts.body(
+                weight: FontWeight.w700,
+                color: AppColors.primaryBlue,
+              ),
+            ),
+            Gaps.hXs,
+            Text(
+              routine.exercise.motivation,
+              style: AppFonts.body(color: AppColors.textGray),
+            ),
+            Gaps.hSm,
+            Text(
+              'Instruction',
+              style: AppFonts.body(
+                weight: FontWeight.w700,
+                color: AppColors.primaryBlue,
+              ),
+            ),
+            Gaps.hXs,
+            Text(
+              routine.exercise.instruction,
+              style: AppFonts.body(color: AppColors.textGray),
+            ),
+          ],
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              'Close',
+              style: AppFonts.body(
+                weight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
@@ -165,191 +224,210 @@ class _ExercisePageState extends State<ExercisePage> {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: Insets.screen,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () => context.go(AppRoutes.home),
-                    child: Text(
-                      '◄ Back',
-                      style: AppFonts.body(color: Colors.white),
-                    ),
-                  ),
-                  const Spacer(),
-                  const Text('💬', style: TextStyle(fontSize: 22)),
-                ],
-              ),
-              Gaps.hXs,
-              Text(
-                'Stay Active at Work',
-                style: AppFonts.display(size: 26, color: AppColors.primaryBlue),
-              ),
-              Gaps.hXs,
-              Text(
-                'Hourly stretches to refresh your body and boost focus',
-                style: AppFonts.body(size: 13, color: AppColors.textGray2),
-              ),
-              Gaps.hSm,
-              AccentBar.blue,
-              Gaps.hLg,
-              GradientCard(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: Insets.screen,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${routine.exercise.emoji} ${routine.exercise.name}',
-                      style: AppFonts.body(
-                        size: 16,
-                        weight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Gaps.hSm,
-                    Text(
-                      '🫧 Motivation: ${routine.exercise.motivation}',
-                      style: AppFonts.body(
-                        size: 13,
-                        color: AppColors.textGray,
-                      ),
-                    ),
-                    Gaps.hSm,
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(AppSpacing.md),
-                      decoration: BoxDecoration(
-                        color: AppColors.overlayLight,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        routine.exercise.instruction,
-                        style: AppFonts.body(
-                          size: 13,
-                          color: AppColors.textGray3,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Gaps.hXl,
-              Expanded(
-                child: Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        height: 280,
-                        width: 280,
-                        child: CircularProgressIndicator(
-                          value: progress.clamp(0, 1),
-                          strokeWidth: 10,
-                          backgroundColor: AppColors.overlayLight,
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                            AppColors.purpleStart,
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () => context.go(AppRoutes.home),
+                          child: Text(
+                            '◄ Back',
+                            style: AppFonts.body(color: Colors.white),
                           ),
                         ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: _showExerciseInfoDialog,
+                          tooltip: 'Exercise details',
+                          icon: const Text(
+                            '💬',
+                            style: TextStyle(fontSize: 22),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gaps.hXs,
+                    Text(
+                      'Stay Active at Work',
+                      style: AppFonts.display(color: AppColors.primaryBlue),
+                    ),
+                    Gaps.hXs,
+                    Text(
+                      'Hourly stretches to refresh your body and boost focus',
+                      style: AppFonts.body(
+                        size: 13,
+                        color: AppColors.textGray2,
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
+                    ),
+                    Gaps.hSm,
+                    AccentBar.blue,
+                    Gaps.hLg,
+                    GradientCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _formatDuration(_remainingSeconds),
-                            style: AppFonts.display(
-                              size: 56,
+                            '${routine.exercise.emoji} '
+                            '${routine.exercise.name}',
+                            style: AppFonts.body(
+                              size: 16,
+                              weight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Gaps.hSm,
+                          Text(
+                            '🫧 Motivation: ${routine.exercise.motivation}',
+                            style: AppFonts.body(
+                              size: 13,
+                              color: AppColors.textGray,
+                            ),
+                          ),
+                          Gaps.hSm,
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(AppSpacing.md),
+                            decoration: BoxDecoration(
+                              color: AppColors.overlayLight,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              routine.exercise.instruction,
+                              style: AppFonts.body(
+                                size: 13,
+                                color: AppColors.textGray3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gaps.hXl,
+                    Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            height: 280,
+                            width: 280,
+                            child: CircularProgressIndicator(
+                              value: progress.clamp(0, 1),
+                              strokeWidth: 10,
+                              backgroundColor: AppColors.overlayLight,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                AppColors.purpleStart,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                _formatDuration(_remainingSeconds),
+                                style: AppFonts.display(
+                                  size: 56,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Gaps.hXs,
+                              Text(
+                                _running
+                                    ? 'Keep going'
+                                    : _hasCompletedSet
+                                    ? 'Done for this hour'
+                                    : "Let's go",
+                                style: AppFonts.body(
+                                  size: 20,
+                                  color: AppColors.textGray,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gaps.hXl,
+                    Row(
+                      children: [
+                        _CircleButton(
+                          icon: '⏮',
+                          onTap: () => _moveHour(-1),
+                        ),
+                        Gaps.wSm,
+                        Expanded(
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: _running
+                                  ? AppColors.red
+                                  : AppColors.greenStart,
+                              minimumSize: const Size.fromHeight(54),
+                            ),
+                            onPressed: _toggleTimer,
+                            child: Text(_running ? 'Pause' : 'Start'),
+                          ),
+                        ),
+                        Gaps.wSm,
+                        _CircleButton(
+                          icon: '⏭',
+                          onTap: () => _moveHour(1),
+                        ),
+                      ],
+                    ),
+                    Gaps.hLg,
+                    GradientCard(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.md,
+                        AppSpacing.sm,
+                        AppSpacing.md,
+                        AppSpacing.md,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AccentBar.purple,
+                          Gaps.hSm,
+                          Text(
+                            '🕐 Hour:',
+                            style: AppFonts.body(color: AppColors.textGray),
+                          ),
+                          Gaps.hXs,
+                          Text(
+                            '${routine.label} — ${routine.sublabel}',
+                            style: AppFonts.body(
+                              weight: FontWeight.w600,
                               color: Colors.white,
                             ),
                           ),
                           Gaps.hXs,
                           Text(
-                            _running
-                                ? 'Keep going'
-                                : _hasCompletedSet
-                                ? 'Done for this hour'
-                                : 'Let\'s go',
+                            _hasCompletedSet
+                                ? '📈 Streak continues!'
+                                : '⏳ Finish this set to log progress.',
                             style: AppFonts.body(
-                              size: 20,
-                              color: AppColors.textGray,
+                              size: 13,
+                              color: _hasCompletedSet
+                                  ? AppColors.greenStart
+                                  : AppColors.textGray,
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  _CircleButton(
-                    icon: '⏮',
-                    onTap: () => _moveHour(-1),
-                  ),
-                  Gaps.wSm,
-                  Expanded(
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: _running
-                            ? AppColors.red
-                            : AppColors.greenStart,
-                        minimumSize: const Size.fromHeight(54),
-                      ),
-                      onPressed: _toggleTimer,
-                      child: Text(_running ? 'Pause' : 'Start'),
                     ),
-                  ),
-                  Gaps.wSm,
-                  _CircleButton(
-                    icon: '⏭',
-                    onTap: () => _moveHour(1),
-                  ),
-                ],
-              ),
-              Gaps.hLg,
-              GradientCard(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.md,
-                  AppSpacing.sm,
-                  AppSpacing.md,
-                  AppSpacing.md,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AccentBar.purple,
-                    Gaps.hSm,
-                    Text(
-                      '🕐 Hour:',
-                      style: AppFonts.body(color: AppColors.textGray),
-                    ),
-                    Gaps.hXs,
-                    Text(
-                      '${routine.label} — ${routine.sublabel}',
-                      style: AppFonts.body(
-                        weight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Gaps.hXs,
-                    Text(
-                      _hasCompletedSet
-                          ? '📈 Streak continues!'
-                          : '⏳ Finish this set to log progress.',
-                      style: AppFonts.body(
-                        size: 13,
-                        color: _hasCompletedSet
-                            ? AppColors.greenStart
-                            : AppColors.textGray,
-                      ),
-                    ),
+                    Gaps.hLg,
                   ],
                 ),
               ),
-              Gaps.hLg,
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -367,18 +445,18 @@ class _CircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(28),
-      child: Ink(
-        height: 54,
-        width: 54,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.darkCard,
-        ),
-        child: Center(
-          child: Text(icon, style: const TextStyle(fontSize: 18)),
+    return Material(
+      color: AppColors.darkCard,
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          height: 54,
+          width: 54,
+          child: Center(
+            child: Text(icon, style: const TextStyle(fontSize: 18)),
+          ),
         ),
       ),
     );

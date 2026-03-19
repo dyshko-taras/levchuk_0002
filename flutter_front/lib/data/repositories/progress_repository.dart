@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../local/prefs_store.dart';
-import '../models/user_progress.dart';
+import 'package:FlutterApp/data/local/prefs_store.dart';
+import 'package:FlutterApp/data/models/user_progress.dart';
 
 class ProgressRepository {
   ProgressRepository({

@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:permission_handler/permission_handler.dart' as app_settings;
+import 'package:timezone/data/latest_all.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
@@ -11,17 +12,46 @@ class NotificationService {
 
   static final NotificationService instance = NotificationService._();
 
-  static const _hourlyChannelId = 'hourly_reminders';
-  static const _breathingChannelId = 'breathing_reminders';
-  static const _payloadExercise = 'exercise';
-  static const _payloadBreathing = 'breathing_focus';
+  static const String payloadExercise = 'exercise';
+  static const String payloadBreathing = 'breathing_focus';
+
+  static const String _chIdLoud = 'active_office_reminders_loud_v1';
+  static const String _chNameLoud = 'Reminders';
+  static const String _chDescLoud = 'Reminder notifications with sound';
+
+  static const String _chIdSilent = 'active_office_reminders_silent_v1';
+  static const String _chNameSilent = 'Reminders (Silent)';
+  static const String _chDescSilent = 'Reminder notifications without sound';
+
+  static const String _androidSmallIcon = 'ic_notification_launcher';
+
+  static const List<int> _hourlyReminderHours = <int>[
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+  ];
+
+  static const List<int> _breathingReminderHours = <int>[
+    10,
+    12,
+    14,
+    16,
+    18,
+  ];
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
   final StreamController<String> _payloadController =
       StreamController<String>.broadcast();
 
-  bool _initialized = false;
+  bool _inited = false;
   String? _pendingPayload;
 
   Stream<String> get payloadStream => _payloadController.stream;
@@ -32,22 +62,43 @@ class NotificationService {
     return payload;
   }
 
-  Future<void> initialize() async {
-    if (_initialized) {
+  void _log(String message) {
+    developer.log('[NotificationService] $message');
+    debugPrint('[NotificationService] $message');
+  }
+
+  Future<void> init() async {
+    if (_inited) {
+      _log('Already initialized, skipping.');
       return;
     }
 
-    tz.initializeTimeZones();
-    final timeZoneName = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timeZoneName));
+    tz_data.initializeTimeZones();
+    const tzName = 'Europe/Kyiv';
+    tz.setLocalLocation(tz.getLocation(tzName));
+    _log('Timezone initialized: $tzName');
 
-    const initializationSettings = InitializationSettings(
-      android: AndroidInitializationSettings('ic_launcher'),
+    const androidInit = AndroidInitializationSettings(_androidSmallIcon);
+    const iosInit = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+    const initSettings = InitializationSettings(
+      android: androidInit,
+      iOS: iosInit,
     );
 
     await _plugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: _handleNotificationResponse,
+      initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        final payload = response.payload;
+        _log('Notification tapped: $payload');
+        if (payload == null || payload.isEmpty) {
+          return;
+        }
+        _payloadController.add(payload);
+      },
     );
 
     final launchDetails = await _plugin.getNotificationAppLaunchDetails();
@@ -58,131 +109,164 @@ class NotificationService {
       }
     }
 
-    await _createChannels();
-    _initialized = true;
+    final android = _plugin.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin
+    >();
+
+    await android?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _chIdLoud,
+        _chNameLoud,
+        description: _chDescLoud,
+        importance: Importance.high,
+      ),
+    );
+
+    await android?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _chIdSilent,
+        _chNameSilent,
+        description: _chDescSilent,
+        importance: Importance.high,
+        playSound: false,
+        enableVibration: false,
+      ),
+    );
+
+    _inited = true;
+    _log('Initialization completed.');
   }
 
-  Future<PermissionStatus> notificationPermissionStatus() {
-    return Permission.notification.status;
+  NotificationDetails _details({required bool withSound}) {
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        withSound ? _chIdLoud : _chIdSilent,
+        withSound ? _chNameLoud : _chNameSilent,
+        channelDescription: withSound ? _chDescLoud : _chDescSilent,
+        icon: _androidSmallIcon,
+        importance: Importance.high,
+        priority: Priority.high,
+        enableVibration: withSound,
+        playSound: withSound,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: withSound,
+      ),
+    );
   }
 
-  Future<PermissionStatus> requestNotificationPermission() {
-    return Permission.notification.request();
+  Future<bool> areNotificationsEnabledSystem() async {
+    final status = await app_settings.Permission.notification.status;
+    final enabled = status.isGranted || status.isProvisional;
+    _log('Permission status: ${status.name} -> enabled=$enabled');
+    return enabled;
   }
 
-  Future<bool> openSystemSettings() => openAppSettings();
+  Future<app_settings.PermissionStatus> notificationPermissionStatus() {
+    return app_settings.Permission.notification.status;
+  }
+
+  Future<bool> requestNotificationPermission() async {
+    await init();
+    final status = await app_settings.Permission.notification.request();
+    final granted = status.isGranted || status.isProvisional;
+    _log('Permission request result: ${status.name}');
+    return granted;
+  }
+
+  Future<void> openAppSettings() async {
+    _log('Opening app settings');
+    await app_settings.openAppSettings();
+  }
+
+  Future<void> showTestNotification() async {
+    await init();
+    _log('Showing immediate test notification');
+    await _plugin.show(
+      999999,
+      'ActiveOffice Test Notification',
+      'If you can see this, local notifications are working.',
+      _details(withSound: true),
+      payload: 'test_notification',
+    );
+  }
 
   Future<void> syncReminderSchedules({
     required bool hourlyEnabled,
     required bool breathingEnabled,
+    required bool soundEnabled,
   }) async {
+    await init();
+    _log(
+      'Sync schedules: hourly=$hourlyEnabled, '
+      'breathing=$breathingEnabled, sound=$soundEnabled',
+    );
+
     await cancelReminderSchedules();
 
     if (hourlyEnabled) {
-      for (var hour = 9; hour <= 18; hour++) {
+      for (final hour in _hourlyReminderHours) {
         await _scheduleDailyReminder(
           id: 100 + hour,
           hour: hour,
-          minute: 0,
-          title: 'It\'s time to stretch!',
+          title: "It's time to stretch!",
           body: 'Open your hourly movement break and reset your posture.',
-          payload: '$_payloadExercise:$hour',
-          channelId: _hourlyChannelId,
-          channelName: 'Hourly Stretch Reminders',
-          channelDescription: 'Stretch reminders during the workday',
+          payload: '$payloadExercise:$hour',
+          withSound: soundEnabled,
         );
       }
     }
 
     if (breathingEnabled) {
-      for (final hour in [10, 12, 14, 16, 18]) {
+      for (final hour in _breathingReminderHours) {
         await _scheduleDailyReminder(
           id: 200 + hour,
           hour: hour,
-          minute: 0,
           title: 'Take a 3-minute breathing break.',
           body: 'Open Focus Breathing and refocus your energy.',
-          payload: _payloadBreathing,
-          channelId: _breathingChannelId,
-          channelName: 'Breathing Reminders',
-          channelDescription: 'Breathing reminders during the workday',
+          payload: payloadBreathing,
+          withSound: soundEnabled,
         );
       }
     }
   }
 
   Future<void> cancelReminderSchedules() async {
-    for (var hour = 9; hour <= 18; hour++) {
+    _log('Cancelling reminder schedules');
+    for (final hour in _hourlyReminderHours) {
       await _plugin.cancel(100 + hour);
     }
-    for (final hour in [10, 12, 14, 16, 18]) {
+    for (final hour in _breathingReminderHours) {
       await _plugin.cancel(200 + hour);
     }
-  }
-
-  Future<void> _createChannels() async {
-    final androidImplementation = _plugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
-
-    if (androidImplementation == null) {
-      return;
-    }
-
-    await androidImplementation.createNotificationChannel(
-      const AndroidNotificationChannel(
-        _hourlyChannelId,
-        'Hourly Stretch Reminders',
-        description: 'Stretch reminders during the workday',
-        importance: Importance.high,
-      ),
-    );
-
-    await androidImplementation.createNotificationChannel(
-      const AndroidNotificationChannel(
-        _breathingChannelId,
-        'Breathing Reminders',
-        description: 'Breathing reminders during the workday',
-        importance: Importance.high,
-      ),
-    );
   }
 
   Future<void> _scheduleDailyReminder({
     required int id,
     required int hour,
-    required int minute,
     required String title,
     required String body,
     required String payload,
-    required String channelId,
-    required String channelName,
-    required String channelDescription,
+    required bool withSound,
   }) async {
-    final scheduledAt = _nextDailyInstance(hour, minute);
+    final scheduledAt = _nextInstanceOfHour(hour);
+    _log('Scheduling id=$id at $scheduledAt payload=$payload');
 
     await _plugin.zonedSchedule(
       id,
       title,
       body,
       scheduledAt,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          channelName,
-          channelDescription: channelDescription,
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-      ),
+      _details(withSound: withSound),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       payload: payload,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 
-  tz.TZDateTime _nextDailyInstance(int hour, int minute) {
+  tz.TZDateTime _nextInstanceOfHour(int hour) {
     final now = tz.TZDateTime.now(tz.local);
     var scheduled = tz.TZDateTime(
       tz.local,
@@ -190,21 +274,12 @@ class NotificationService {
       now.month,
       now.day,
       hour,
-      minute,
     );
 
-    if (scheduled.isBefore(now)) {
+    if (!scheduled.isAfter(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 
     return scheduled;
-  }
-
-  void _handleNotificationResponse(NotificationResponse response) {
-    final payload = response.payload;
-    if (payload == null || payload.isEmpty) {
-      return;
-    }
-    _payloadController.add(payload);
   }
 }

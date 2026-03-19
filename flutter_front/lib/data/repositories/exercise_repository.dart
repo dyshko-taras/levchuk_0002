@@ -1,6 +1,6 @@
-import '../local/asset_loader.dart';
-import '../models/exercise.dart';
-import '../models/hourly_routine.dart';
+import 'package:FlutterApp/data/local/asset_loader.dart';
+import 'package:FlutterApp/data/models/exercise.dart';
+import 'package:FlutterApp/data/models/hourly_routine.dart';
 
 class ExerciseRepository {
   ExerciseRepository({

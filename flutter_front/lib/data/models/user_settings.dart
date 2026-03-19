@@ -11,6 +11,13 @@ class UserSettings {
     required this.devicePreviewEnabled,
   });
 
+  factory UserSettings.defaults() => const UserSettings(
+    hourlyReminders: true,
+    breathingReminders: true,
+    soundEnabled: false,
+    devicePreviewEnabled: false,
+  );
+
   factory UserSettings.fromJson(Map<String, dynamic> json) =>
       _$UserSettingsFromJson(json);
 
@@ -20,11 +27,4 @@ class UserSettings {
   final bool devicePreviewEnabled;
 
   Map<String, dynamic> toJson() => _$UserSettingsToJson(this);
-
-  factory UserSettings.defaults() => const UserSettings(
-        hourlyReminders: true,
-        breathingReminders: true,
-        soundEnabled: false,
-        devicePreviewEnabled: false,
-      );
 }

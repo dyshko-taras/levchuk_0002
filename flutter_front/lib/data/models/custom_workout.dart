@@ -1,6 +1,5 @@
+import 'package:FlutterApp/data/models/workout_step.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'workout_step.dart';
 
 part 'custom_workout.g.dart';
 

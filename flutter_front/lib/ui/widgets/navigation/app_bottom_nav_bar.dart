@@ -1,8 +1,7 @@
+import 'package:FlutterApp/constants/app_icons.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/app_icons.dart';
-import '../../../constants/app_spacing.dart';
-import '../../theme/app_fonts.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   const AppBottomNavBar({
@@ -14,7 +13,7 @@ class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  static const _items = [
+  static const List<(String, String)> _items = [
     (AppIcons.home, 'Home'),
     (AppIcons.tips, 'Tips'),
     (AppIcons.breathe, 'Breathe'),
@@ -52,7 +51,10 @@ class AppBottomNavBar extends StatelessWidget {
                           ),
                           gradient: active
                               ? const LinearGradient(
-                                  colors: [Color(0xFF53ADFF), Color(0xFF135AC2)],
+                                  colors: [
+                                    Color(0xFF53ADFF),
+                                    Color(0xFF135AC2),
+                                  ],
                                 )
                               : null,
                         ),

@@ -19,7 +19,8 @@ abstract final class AppStrings {
   static const quoteOfDayTitle = 'Quote of the Day';
   static const placeholderComingSoon = 'Phase 1 foundation is ready.';
   static const placeholderNextStep =
-      'Feature logic and screen details will be implemented in the next phases.';
+      'Feature logic and screen details will be implemented in the next '
+      'phases.';
   static const devicePreviewLabel = 'Device Preview';
   static const hourlyRemindersLabel = 'Hourly Reminders';
   static const breathingRemindersLabel = 'Breathing Reminders';

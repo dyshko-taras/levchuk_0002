@@ -1,6 +1,5 @@
+import 'package:FlutterApp/ui/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../../ui/theme/app_colors.dart';
 
 class AccentBar extends StatelessWidget {
   const AccentBar({

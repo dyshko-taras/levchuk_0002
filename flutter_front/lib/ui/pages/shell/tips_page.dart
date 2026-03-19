@@ -1,15 +1,14 @@
+import 'package:FlutterApp/constants/app_images.dart';
+import 'package:FlutterApp/constants/app_routes.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/providers/tips_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/gradient_card.dart';
+import 'package:FlutterApp/ui/widgets/common/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_images.dart';
-import '../../constants/app_routes.dart';
-import '../../constants/app_spacing.dart';
-import '../../providers/tips_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
-import '../widgets/common/gradient_card.dart';
-import '../widgets/common/screen_header.dart';
 
 class TipsPage extends StatelessWidget {
   const TipsPage({super.key});
@@ -35,7 +34,7 @@ class TipsPage extends StatelessWidget {
                   AppSpacing.lg,
                 ),
                 itemCount: tipsProvider.topics.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final topic = tipsProvider.topics[index];
                   return InkWell(
@@ -45,7 +44,9 @@ class TipsPage extends StatelessWidget {
                       child: Stack(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                            padding: const EdgeInsets.only(
+                              bottom: AppSpacing.xs,
+                            ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -61,7 +62,8 @@ class TipsPage extends StatelessWidget {
                                 Gaps.wSm,
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         topic.title,
@@ -94,7 +96,10 @@ class TipsPage extends StatelessWidget {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: [Color(0xFF28BAE8), Color(0xFF176ECA)],
+                                    colors: [
+                                      Color(0xFF28BAE8),
+                                      Color(0xFF176ECA),
+                                    ],
                                   ),
                                   borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(20),

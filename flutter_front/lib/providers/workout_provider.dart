@@ -1,13 +1,12 @@
 import 'dart:async';
 
+import 'package:FlutterApp/data/models/custom_workout.dart';
+import 'package:FlutterApp/data/models/exercise.dart';
+import 'package:FlutterApp/data/models/workout_step.dart';
+import 'package:FlutterApp/data/repositories/exercise_repository.dart';
+import 'package:FlutterApp/data/repositories/workout_repository.dart';
+import 'package:FlutterApp/providers/routine_provider.dart';
 import 'package:flutter/foundation.dart';
-
-import '../data/models/custom_workout.dart';
-import '../data/models/exercise.dart';
-import '../data/models/workout_step.dart';
-import '../data/repositories/exercise_repository.dart';
-import '../data/repositories/workout_repository.dart';
-import 'routine_provider.dart';
 
 class WorkoutProvider extends ChangeNotifier {
   WorkoutProvider({
@@ -207,7 +206,7 @@ class WorkoutProvider extends ChangeNotifier {
       return;
     }
     if (_sessionIndex >= _sessionSteps.length - 1) {
-      _completeSession();
+      unawaited(_completeSession());
       return;
     }
     _sessionIndex++;
@@ -248,6 +247,68 @@ class WorkoutProvider extends ChangeNotifier {
     await _workoutRepository.clear();
   }
 
+  Future<void> applyDemoData() async {
+    final deskReset = [
+      const WorkoutStep(
+        id: 'demo-stand-side-bend',
+        name: 'Stand Side Bend',
+        durationSeconds: 25,
+        isCustom: false,
+      ),
+      const WorkoutStep(
+        id: 'demo-shoulder-rolls',
+        name: 'Shoulder Rolls',
+        durationSeconds: 20,
+        isCustom: false,
+      ),
+      const WorkoutStep(
+        id: 'demo-custom-breath-break',
+        name: 'Desk Breath Reset',
+        durationSeconds: 45,
+        isCustom: true,
+      ),
+    ];
+
+    final focusFlow = [
+      const WorkoutStep(
+        id: 'demo-chair-squat',
+        name: 'Chair Squat',
+        durationSeconds: 30,
+        isCustom: false,
+      ),
+      const WorkoutStep(
+        id: 'demo-neck-stretch',
+        name: 'Neck Stretch',
+        durationSeconds: 20,
+        isCustom: false,
+      ),
+      const WorkoutStep(
+        id: 'demo-wrist-reset',
+        name: 'Wrist Reset',
+        durationSeconds: 40,
+        isCustom: true,
+      ),
+    ];
+
+    _draftSteps = [...deskReset];
+    _savedWorkouts = [
+      CustomWorkout(
+        id: 'demo-desk-reset',
+        name: 'Desk Reset',
+        steps: deskReset,
+        createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+      CustomWorkout(
+        id: 'demo-focus-flow',
+        name: 'Focus Flow',
+        steps: focusFlow,
+        createdAt: DateTime.now().subtract(const Duration(days: 1)),
+      ),
+    ];
+    notifyListeners();
+    await _workoutRepository.saveAll(_savedWorkouts);
+  }
+
   void _startSession(List<WorkoutStep> steps) {
     if (steps.isEmpty) {
       return;
@@ -266,7 +327,7 @@ class WorkoutProvider extends ChangeNotifier {
   void _tick() {
     if (_sessionRemainingSeconds <= 1) {
       if (_sessionIndex >= _sessionSteps.length - 1) {
-        _completeSession();
+        unawaited(_completeSession());
       } else {
         _sessionIndex++;
         _sessionRemainingSeconds = _sessionSteps[_sessionIndex].durationSeconds;

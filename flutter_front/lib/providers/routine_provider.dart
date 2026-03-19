@@ -1,10 +1,9 @@
+import 'package:FlutterApp/data/models/day_progress.dart';
+import 'package:FlutterApp/data/models/hourly_routine.dart';
+import 'package:FlutterApp/data/models/user_progress.dart';
+import 'package:FlutterApp/data/repositories/exercise_repository.dart';
+import 'package:FlutterApp/data/repositories/progress_repository.dart';
 import 'package:flutter/foundation.dart';
-
-import '../data/models/day_progress.dart';
-import '../data/models/hourly_routine.dart';
-import '../data/models/user_progress.dart';
-import '../data/repositories/exercise_repository.dart';
-import '../data/repositories/progress_repository.dart';
 
 class RoutineProvider extends ChangeNotifier {
   RoutineProvider({
@@ -151,5 +150,41 @@ class RoutineProvider extends ChangeNotifier {
     _userProgress = UserProgress.empty();
     notifyListeners();
     await _progressRepository.clear();
+  }
+
+  Future<void> applyDemoData() async {
+    final today = DateTime.parse(todayKey);
+    final yesterdayKey = today
+        .subtract(const Duration(days: 1))
+        .toIso8601String()
+        .split('T')
+        .first;
+    final twoDaysAgoKey = today
+        .subtract(const Duration(days: 2))
+        .toIso8601String()
+        .split('T')
+        .first;
+
+    _userProgress = UserProgress(
+      dailyProgress: {
+        todayKey: const DayProgress(
+          completedHours: [1, 2, 3, 5],
+          breathingMinutes: 9,
+          workoutSessions: 1,
+        ),
+        yesterdayKey: const DayProgress(
+          completedHours: [1, 2, 4],
+          breathingMinutes: 6,
+          workoutSessions: 1,
+        ),
+        twoDaysAgoKey: const DayProgress(
+          completedHours: [2, 3],
+          breathingMinutes: 3,
+          workoutSessions: 0,
+        ),
+      },
+    );
+    notifyListeners();
+    await _progressRepository.save(_userProgress);
   }
 }

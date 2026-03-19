@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:FlutterApp/data/models/breathing_settings.dart';
+import 'package:FlutterApp/data/repositories/breathing_settings_repository.dart';
+import 'package:FlutterApp/enums/enums.dart';
+import 'package:FlutterApp/providers/routine_provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
-
-import '../data/models/breathing_settings.dart';
-import '../data/repositories/breathing_settings_repository.dart';
-import '../enums/enums.dart';
-import 'routine_provider.dart';
 
 class BreathingProvider extends ChangeNotifier {
   BreathingProvider({
@@ -16,6 +16,8 @@ class BreathingProvider extends ChangeNotifier {
 
   final BreathingSettingsRepository _repository;
   final RoutineProvider _routineProvider;
+  final AudioPlayer _audioPlayer = AudioPlayer()
+    ..setReleaseMode(ReleaseMode.stop);
 
   bool _loaded = false;
   BreathingSettings _settings = BreathingSettings.defaults();
@@ -121,7 +123,7 @@ class BreathingProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> updateSound(bool enabled) async {
+  Future<void> updateSound({required bool enabled}) async {
     await update(
       BreathingSettings(
         durationMinutes: _settings.durationMinutes,
@@ -163,6 +165,7 @@ class BreathingProvider extends ChangeNotifier {
     }
     _timer?.cancel();
     _sessionRunning = false;
+    unawaited(_audioPlayer.stop());
     notifyListeners();
   }
 
@@ -174,6 +177,7 @@ class BreathingProvider extends ChangeNotifier {
   void stopSession() {
     _timer?.cancel();
     _resetSessionState();
+    unawaited(_audioPlayer.stop());
     notifyListeners();
   }
 
@@ -195,7 +199,7 @@ class BreathingProvider extends ChangeNotifier {
 
   void _tick() {
     if (_remainingSeconds <= 1) {
-      _completeSession();
+      unawaited(_completeSession());
       return;
     }
 
@@ -253,6 +257,23 @@ class BreathingProvider extends ChangeNotifier {
     _phase = phase;
     _phaseDurationSeconds = _durationForPhase(phase);
     _phaseRemainingSeconds = _phaseDurationSeconds;
+    if (_settings.soundEnabled &&
+        phase != BreathingPhase.idle &&
+        phase != BreathingPhase.completed) {
+      unawaited(_playPhaseCue());
+    }
+  }
+
+  Future<void> _playPhaseCue() async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer.play(
+        AssetSource('sounds/breath_phase.wav'),
+        volume: 0.35,
+      );
+    } on Exception {
+      // Ignore cue playback failures and keep the breathing flow running.
+    }
   }
 
   void _resetSessionState() {
@@ -318,6 +339,7 @@ class BreathingProvider extends ChangeNotifier {
   @override
   void dispose() {
     _timer?.cancel();
+    unawaited(_audioPlayer.dispose());
     super.dispose();
   }
 }

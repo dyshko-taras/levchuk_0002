@@ -506,10 +506,10 @@ Exit criteria:
 
 Checklist:
 
-- [ ] Complete persisted settings hookup for `device_preview` in debug-only mode per `docs/device_preview.md`.
-- [ ] Final polish for back behavior, reset flows, text overflow, and edge cases.
-- [ ] Run lint cleanup after the app is functionally complete.
-- [ ] Verify assets, naming, and safe-area handling.
+- [x] Complete persisted settings hookup for `device_preview` in debug-only mode per `docs/device_preview.md`.
+- [x] Final polish for back behavior, reset flows, text overflow, and edge cases.
+- [x] Run lint cleanup after the app is functionally complete.
+- [x] Verify assets, naming, and safe-area handling.
 
 Exit criteria:
 
@@ -530,7 +530,7 @@ This section is the operational checklist we will update while implementing the 
 - [x] Phase 4. Core UI transfer
 - [x] Phase 5. Interactive exercise flows
 - [x] Phase 6. Notifications and permissions
-- [ ] Phase 7. Debug tooling and finish
+- [x] Phase 7. Debug tooling and finish
 
 ### Immediate next step
 

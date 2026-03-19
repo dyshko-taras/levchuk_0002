@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import '../local/prefs_store.dart';
-import '../models/breathing_settings.dart';
+import 'package:FlutterApp/data/local/prefs_store.dart';
+import 'package:FlutterApp/data/models/breathing_settings.dart';
 
 class BreathingSettingsRepository {
   BreathingSettingsRepository({

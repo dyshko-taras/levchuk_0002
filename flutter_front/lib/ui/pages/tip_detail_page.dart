@@ -1,13 +1,12 @@
+import 'package:FlutterApp/constants/app_images.dart';
+import 'package:FlutterApp/constants/app_spacing.dart';
+import 'package:FlutterApp/providers/tips_provider.dart';
+import 'package:FlutterApp/ui/theme/app_colors.dart';
+import 'package:FlutterApp/ui/theme/app_fonts.dart';
+import 'package:FlutterApp/ui/widgets/common/gradient_card.dart';
+import 'package:FlutterApp/ui/widgets/common/screen_header.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/app_images.dart';
-import '../../constants/app_spacing.dart';
-import '../../providers/tips_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_fonts.dart';
-import '../widgets/common/gradient_card.dart';
-import '../widgets/common/screen_header.dart';
 
 class TipDetailPage extends StatelessWidget {
   const TipDetailPage({
@@ -90,10 +89,15 @@ class TipDetailPage extends StatelessWidget {
                       onTap: () => Navigator.of(context).maybePop(),
                       child: Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.md,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: AppColors.greenStart, width: 3),
+                          border: Border.all(
+                            color: AppColors.greenStart,
+                            width: 3,
+                          ),
                         ),
                         child: Text(
                           'Back',

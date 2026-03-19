@@ -1,5 +1,5 @@
-import '../local/asset_loader.dart';
-import '../models/quote.dart';
+import 'package:FlutterApp/data/local/asset_loader.dart';
+import 'package:FlutterApp/data/models/quote.dart';
 
 class QuotesRepository {
   QuotesRepository({

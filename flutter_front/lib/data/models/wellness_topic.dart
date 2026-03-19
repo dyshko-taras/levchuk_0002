@@ -1,6 +1,5 @@
+import 'package:FlutterApp/data/models/wellness_tip.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'wellness_tip.dart';
 
 part 'wellness_topic.g.dart';
 
